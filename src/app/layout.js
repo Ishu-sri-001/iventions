@@ -1,15 +1,35 @@
-import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
+import localFont from "next/font/local";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const Font1 = localFont({
+  src: [
+    { path: "./fonts/font1.woff2", weight: "300", style: "normal" },
+  ],
+  variable: '--font-body',
+  display: "swap",
+  fallback:["system-ui, sans-serif"],
+})
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const Font2 = localFont({
+  src: [
+    { path: "./fonts/font2.woff2", weight: "400", style: "normal" },
+  ],
+  variable: '--font-display',
+  display: "swap",
+  fallback:["system-ui, sans-serif"],
+})
+
+const Font3 = localFont({
+  src: [
+    { path: "./fonts/font3.woff2", weight: "400", style: "normal" },
+  ],
+  variable: '--font-third',
+  display: "swap",
+  fallback:["system-ui, sans-serif"],
+})
+
+
 
 export const metadata = {
   title: "Create Next App",
@@ -19,9 +39,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+       <body className={`${Font1.variable} ${Font2.variable} ${Font3.variable} antialiased`}>
         {children}
       </body>
     </html>

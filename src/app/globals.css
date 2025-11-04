@@ -3,24 +3,58 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --yellow: #E0FF98;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-yellow:var(--yellow);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-body:var(--font-body);
+  --font-display:var(--font-display);
+  --font-third:var(--font-third);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #000000;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+   font-family: var(--font-body);
+   width: 100vw;
+   overflow-x: hidden;
 }
+
+.font-body {
+  font-family: var(--font-body)
+}
+
+.font-display {
+  font-family: var(--font-display)
+}
+
+.font-third {
+  font-family: var(--font-third)
+}
+
+.clip-custom {
+  clip-path: polygon(62% 0, 91% 0, 56% 49%, 59% 100%, 0 100%, 0 28%, 50% 39%);
+  background-color: #9C93E8;
+
+}
+
+.primary-yellow {
+  background-color: #E0FF98;
+}
+
+#hero {
+    background-color: #F3EFEB;
+}
+
