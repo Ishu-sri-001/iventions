@@ -50,11 +50,22 @@ body {
 
 }
 
+.clip-start {
+  clip-path: polygon(53% 0, 96% 0, 51% 52%, 40% 100%, 5% 100%, 44% 50%);
+  background-color: #9C93E8;
+}
+
 .primary-yellow {
   background-color: #E0FF98;
 }
 
 #hero {
     background-color: #F3EFEB;
+}
+
+.navbar-clip-path {
+  clip-path: polygon(0 0, 16% 0, 100% 25%, 100% 100%, 83% 100%, 0 7%);
+border-bottom-right-radius: 5vw; /* adjust size */
+    background-color: #E0FF98;
 }
 
