@@ -15,6 +15,7 @@ export default function ClippedTextSection() {
   const [isMouseInSlider, setIsMouseInSlider] = useState(false);
   const textRef = useRef(null);
   const autoPlayTimerRef = useRef(null);
+  const sectionRef = useRef(null);
 
   //  Each slide has its own background + text
   const slides = [
@@ -93,7 +94,7 @@ export default function ClippedTextSection() {
   // Scroll progress detection
   useEffect(() => {
     const handleScroll = () => {
-      const section = document.getElementById("about");
+      const section = sectionRef.current;
       if (!section) return;
 
       const rect = section.getBoundingClientRect();
@@ -123,7 +124,7 @@ export default function ClippedTextSection() {
   useEffect(() => {
     if (!isSliderActive || isTransitioning) return;
 
-       // Clear existing timer
+    // Clear existing timer
     if (autoPlayTimerRef.current) {
       clearTimeout(autoPlayTimerRef.current);
     }
@@ -171,7 +172,7 @@ export default function ClippedTextSection() {
   const changeSlide = (newIndex) => {
     if (isTransitioning) return;
 
-      // Clear auto-play timer when manually changing slides
+    // Clear auto-play timer when manually changing slides
     if (autoPlayTimerRef.current) {
       clearTimeout(autoPlayTimerRef.current);
     }
@@ -218,33 +219,7 @@ export default function ClippedTextSection() {
   };
 
   return (
-    <section id="about" className="relative w-screen h-[300vh]">
-      {/* Background Image - ALWAYS use currentSlide image so it doesn't reset when leaving */}
-      <div
-        className="fixed top-0 left-0 h-screen w-full bg-cover bg-center transition-opacity duration-700"
-        style={{
-          backgroundImage: `url('${slides[currentSlide].image}')`,
-          zIndex: -1,
-        }}
-      />
-
-      {/* Clip Path Diagonal V-Shape Transition Overlay */}
-      {isTransitioning && (
-        <div
-          className="fixed top-0 left-0 h-screen w-full pointer-events-none overflow-hidden"
-          style={{ zIndex: 10 }}
-        >
-          <div
-            className="absolute inset-0 bg-cover bg-center origin-center"
-            style={{
-              backgroundImage: `url('${slides[nextSlideIndex].image}')`,
-              clipPath: "polygon(45% 50%, 45% 50%, 45% 50%, 45% 50%)",
-              animation: "expandSingleV 1s linear forwards",
-            }}
-          />
-        </div>
-      )}
-
+    <section ref={sectionRef} id="about" className="relative w-screen h-[300vh]">
       <style jsx>{`
         @keyframes expandSingleV {
           0% {
@@ -272,8 +247,34 @@ export default function ClippedTextSection() {
         }
       `}</style>
 
-      {/* Sticky mask layer */}
+      {/* Sticky container - everything is contained within this */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
+        {/* Background Image - positioned relative to sticky container */}
+        <div
+          className="absolute top-0 left-0 h-full w-full bg-cover bg-center transition-opacity duration-700"
+          style={{
+            backgroundImage: `url('${slides[currentSlide].image}')`,
+          }}
+        />
+
+        {/* Clip Path Diagonal V-Shape Transition Overlay */}
+        {isTransitioning && (
+          <div
+            className="absolute top-0 left-0 h-full w-full pointer-events-none overflow-hidden"
+            style={{ zIndex: 10 }}
+          >
+            <div
+              className="absolute inset-0 bg-cover bg-center origin-center"
+              style={{
+                backgroundImage: `url('${slides[nextSlideIndex].image}')`,
+                clipPath: "polygon(45% 50%, 45% 50%, 45% 50%, 45% 50%)",
+                animation: "expandSingleV 1s linear forwards",
+              }}
+            />
+          </div>
+        )}
+
+        {/* Moving text mask layer */}
         <div
           className="absolute inset-0 moving-about transition-transform duration-100"
           style={{ transform: textTransform }}
@@ -321,7 +322,7 @@ export default function ClippedTextSection() {
           </svg>
         </div>
 
-        <div className="w-screen h-screen bg-black/20 absolute inset-0" />
+        <div className="w-full h-full bg-black/20 absolute inset-0" />
 
         {/* Clickable overlay for screen halves */}
         {isSliderActive && (
@@ -337,7 +338,7 @@ export default function ClippedTextSection() {
         {/* Custom cursor text */}
         {isSliderActive && isMouseInSlider && (
           <div
-            className="fixed pointer-events-none z-50 text-black text-[0.7vw] font-semibold font-body bg-yellow   backdrop-blur-sm h-[8vw] w-[8vw] rounded-full flex items-center justify-center uppercase"
+            className="absolute pointer-events-none z-50 text-black text-[0.7vw] font-semibold font-body bg-yellow backdrop-blur-sm h-[8vw] w-[8vw] rounded-full flex items-center justify-center uppercase"
             style={{
               left: mousePosition.x + 20,
               top: mousePosition.y + 20,
@@ -351,7 +352,7 @@ export default function ClippedTextSection() {
         {isSliderActive && (
           <div
             ref={textRef}
-            className="absolute left-[35%]  w-[60%] min-h-[20vw] top-[75%] -translate-y-1/2 flex flex-col justify-between gap-3 text-white pointer-events-none"
+            className="absolute left-[35%] w-[60%] min-h-[20vw] top-[75%] -translate-y-1/2 flex flex-col justify-between gap-3 text-white pointer-events-none"
           >
             {/* Main Heading */}
             <div className="slide-line">
@@ -361,7 +362,7 @@ export default function ClippedTextSection() {
             </div>
 
             {/* Description */}
-            <div className="flex justify-between items-end ">
+            <div className="flex justify-between items-end">
               <p className="text-[2vw] font-display about-slider-text">
                 {slides[currentSlide].category}
               </p>
@@ -376,10 +377,10 @@ export default function ClippedTextSection() {
         )}
 
         {isSliderActive && (
-        <div className="absolute w-full h-px bg-white opacity-40 top-[50%] " />
+          <div className="absolute w-full h-px bg-white opacity-40 top-[50%]" />
         )}
 
-        {/* Navigation */}
+         {/* Navigation */}
         {/* {isSliderActive && (
           <div className="absolute inset-0 flex items-center justify-between px-8 pointer-events-none">
             <button

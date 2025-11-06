@@ -1,28 +1,49 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   const videoRef = useRef(null);
   const clipRef = useRef(null);
   const heroRef = useRef(null);
+  const [isFullyScaled, setIsFullyScaled] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
 
+      gsap.to('.hero-video', {
+        scale: 3.0,
+        rotateX: 0,
+        rotateY: 0,
+        scrollTrigger: {
+          trigger: '#hero',
+          start: 'top top',
+          end: 'bottom 50%',
+          scrub: true,
+          pin: true,
+          onUpdate: (self) => {
+            // Disable mouse effects only when scroll is complete
+            setIsFullyScaled(self.progress >= 0.99);
+          },
+        }
+      });
+
       gsap.set(".hero-clip-path", {
         scale: 0,
         rotateZ: -180,
         clipPath:
-          "polygon(62% 0%, 91% 0%, 54.5% 48%, 38.75% 100%, 7.25% 100%, 7.25% 100%, 52% 42%)",
+          "polygon(59.15% 0%, 53.34% 51.47%, 15.75% 100%, 15.75% 100%, 46.32% 100%, 55.56% 53.75%, 90.6% 0%)",
         transformOrigin: "center center",
       });
 
       tl.to(".hero-clip-path", {
         opacity: 1,
-        delay: 0.2,
+        duration: 0.2,
       })
 
         .fromTo(
@@ -32,42 +53,43 @@ const Hero = () => {
           },
           {
             scale: 1,
-            // delay: 0.2,
-            ease: "none",
-            duration: 0.5,
-          },
-          "<"
+            ease: "linear",
+            duration: 1,
+          }
         )
 
-        .to(".hero-clip-path", {
-          duration: 0.7,
-          ease: "linear",
-          clipPath:
-            "polygon(62% 0, 91% 0, 56% 49%, 59% 100%, 0 100%, 0 28%, 50% 39%)",
-        })
         .to(
           ".hero-clip-path",
           {
-            // delay: 0.2,
+            delay: 0.5,
             rotateZ: 0,
             ease: "power1.out",
-            duration: 0.3,
+            duration: 1,
           }
         )
-        .to(".hero-video", {
-          opacity: 1,
+
+        .to(".hero-clip-path", {
+          duration: 1.5,
+          ease: "linear",
+          clipPath:
+            "polygon(59.15% 0%, 53.34% 51.47%, 0% 27.43%, 0% 100%, 62.32% 100%, 55.68% 55.08%, 90.6% 0%)",
         })
-      // .to('.hero-video', {
-      //   scale:3,
-      // })
+        
+        .to(videoRef.current, {
+          opacity: 1,
+        });
+      
     });
     return () => ctx.revert();
-  });
+  }, []);
 
   const baseRotateX = 10;
   const baseRotateY = -8;
 
   const handleMouseMove = (e) => {
+    // Disable mouse effects after video is fully scaled
+    if (isFullyScaled) return;
+
     const video = videoRef.current;
     const clip = clipRef.current;
     const hero = heroRef.current;
@@ -89,17 +111,49 @@ const Hero = () => {
     const clipRotateY = baseRotateY - normX * 6;
     const clipRotateX = baseRotateX + normY * 6;
 
-    video.style.transform = `perspective(800px) rotateX(${videoRotateX}deg) rotateY(${videoRotateY}deg) scale(1.05)`;
-    clip.style.transform = `perspective(800px) rotateX(${clipRotateX}deg) rotateY(${clipRotateY}deg) scale(1.02)`;
+    gsap.to(video, {
+      rotateX: videoRotateX,
+      rotateY: videoRotateY,
+      // scale: 1.05,
+      duration: 0.3,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+
+    gsap.to(clip, {
+      rotateX: clipRotateX,
+      rotateY: clipRotateY,
+      scale: 1.02,
+      duration: 0.3,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
   };
 
   const handleMouseLeave = () => {
+    // Disable mouse effects after video is fully scaled
+    if (isFullyScaled) return;
+
     const video = videoRef.current;
     const clip = clipRef.current;
     if (video && clip) {
-      const reset = `perspective(800px) rotateX(${baseRotateX}deg) rotateY(${baseRotateY}deg) scale(1)`;
-      video.style.transform = reset;
-      clip.style.transform = reset;
+      gsap.to(video, {
+        rotateX: baseRotateX,
+        rotateY: baseRotateY,
+        scale: 1,
+        duration: 0.5,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+
+      gsap.to(clip, {
+        rotateX: baseRotateX,
+        rotateY: baseRotateY,
+        scale: 1,
+        duration: 0.5,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
     }
   };
 
@@ -107,24 +161,13 @@ const Hero = () => {
     <section
       ref={heroRef}
       id="hero"
-      onMouseMove={handleMouseMove}
+      onMouseMove={handleMouseMove}  
       onMouseLeave={handleMouseLeave}
       className="w-screen h-screen relative flex items-center justify-center overflow-hidden"
     >
-      {/* CLIP BACKGROUND LAYER */}
-      <div
-        ref={clipRef}
-        className="absolute left-[-10%] clip-start opacity-0 scale-0  origin-center hero-clip-path w-[110vw] h-[105vh] mix-blend-multiply z-0  transition-all duration-500 ease-out"
-        style={{
-          transformStyle: "preserve-3d",
-          transform: `perspective(800px) rotateX(${baseRotateX}deg) rotateY(${baseRotateY}deg)`,
-        }}
-      />
-
-      {/* VIDEO BOX */}
       <div
         ref={videoRef}
-        className="h-[20vw] w-[30vw]  hero-video opacity-0 absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] z-40 rounded-[1.5vw] overflow-hidden transition-transform duration-300 ease-out shadow-2xl"
+        className="h-[20vw] w-[34vw] opacity-0 hero-video relative z-40 rounded-[1.5vw] overflow-hidden shadow-2xl origin-center"
         style={{
           transformStyle: "preserve-3d",
           transform: `perspective(800px) rotateX(${baseRotateX}deg) rotateY(${baseRotateY}deg)`,
@@ -139,6 +182,11 @@ const Hero = () => {
           className="w-full h-full object-cover"
         />
       </div>
+      {/* CLIP BACKGROUND LAYER */}
+      <div
+        ref={clipRef}
+        className="absolute left-[-30%] bottom-[-30%] clip-start opacity-0 scale-0 origin-center hero-clip-path w-[150vw] h-[155vh] mix-blend-multiply z-0"
+      />
 
       {/* TEXT LAYER */}
       <div className="absolute inset-0 h-full w-full flex items-center text-[#101417] justify-between z-20 px-[3vw]">
