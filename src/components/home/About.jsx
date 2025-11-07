@@ -16,6 +16,8 @@ export default function ClippedTextSection() {
   const textRef = useRef(null);
   const autoPlayTimerRef = useRef(null);
   const sectionRef = useRef(null);
+  const maskRef = useRef(null);
+  const cursorRef = useRef(null);
 
   //  Each slide has its own background + text
   const slides = [
@@ -91,34 +93,31 @@ export default function ClippedTextSection() {
     },
   ];
 
-  // Scroll progress detection
+  // GSAP ScrollTrigger for mask animation
   useEffect(() => {
-    const handleScroll = () => {
-      const section = sectionRef.current;
-      if (!section) return;
+    if (!maskRef.current || !sectionRef.current) return;
 
-      const rect = section.getBoundingClientRect();
-      const sectionHeight = section.offsetHeight;
-      const viewportHeight = window.innerHeight;
+    const ctx = gsap.context(() => {
+      gsap.to(maskRef.current, {
+        yPercent: -120,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "50% top",
+          scrub: true,
+          // markers:true,
+          onUpdate: (self) => {
+            setScrollProgress(self.progress);
+          },
+        },
+      });
+    }, sectionRef);
 
-      const progress = Math.max(
-        0,
-        Math.min(1, -rect.top / (sectionHeight - viewportHeight))
-      );
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => ctx.revert();
   }, []);
 
-  const isSliderActive = scrollProgress >= 1;
-  const textTransform =
-    scrollProgress < 1
-      ? `translateY(${-scrollProgress * 120}%)`
-      : "translateY(-120%)";
+  const isSliderActive = scrollProgress >= 0.9;
 
   // Auto-play timer
   useEffect(() => {
@@ -194,7 +193,20 @@ export default function ClippedTextSection() {
   // Handle mouse movement
   const handleMouseMove = (e) => {
     if (!isSliderActive) return;
-    setMousePosition({ x: e.clientX, y: e.clientY });
+    const x = e.clientX;
+    const y = e.clientY;
+    setMousePosition({ x, y });
+
+    // Very smooth follow with GSAP
+    if (cursorRef.current) {
+      gsap.to(cursorRef.current, {
+        x: x,
+        y: y,
+        duration: 0.6,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    }
   };
 
   // Handle click on screen halves
@@ -247,15 +259,22 @@ export default function ClippedTextSection() {
         }
       `}</style>
 
+      <div
+        className="fixed top-0 z-[-1] left-0 h-screen w-full bg-cover bg-center"
+        style={{
+          backgroundImage: `url('${slides[currentSlide].image}')`,
+        }}
+      />
+
       {/* Sticky container - everything is contained within this */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {/* Background Image - positioned relative to sticky container */}
-        <div
+        {/* <div
           className="absolute top-0 left-0 h-full w-full bg-cover bg-center transition-opacity duration-700"
           style={{
             backgroundImage: `url('${slides[currentSlide].image}')`,
           }}
-        />
+        /> */}
 
         {/* Clip Path Diagonal V-Shape Transition Overlay */}
         {isTransitioning && (
@@ -276,8 +295,8 @@ export default function ClippedTextSection() {
 
         {/* Moving text mask layer */}
         <div
-          className="absolute inset-0 moving-about transition-transform duration-100"
-          style={{ transform: textTransform }}
+          ref={maskRef}
+          className="absolute inset-0 moving-about z-5"
         >
           <svg
             viewBox="0 0 1512 823"
@@ -327,7 +346,7 @@ export default function ClippedTextSection() {
         {/* Clickable overlay for screen halves */}
         {isSliderActive && (
           <div
-            className="absolute inset-0 cursor-none"
+            className="absolute inset-0 "
             onClick={handleScreenClick}
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsMouseInSlider(true)}
@@ -338,11 +357,12 @@ export default function ClippedTextSection() {
         {/* Custom cursor text */}
         {isSliderActive && isMouseInSlider && (
           <div
+            ref={cursorRef}
             className="absolute pointer-events-none z-50 text-black text-[0.7vw] font-semibold font-body bg-yellow backdrop-blur-sm h-[8vw] w-[8vw] rounded-full flex items-center justify-center uppercase"
             style={{
-              left: mousePosition.x + 20,
-              top: mousePosition.y + 20,
-              transform: "translate(0, 0)",
+              left: 0,
+              top: 0,
+              transform: "translate(-50%, -50%)",
             }}
           >
             {getCursorText()}

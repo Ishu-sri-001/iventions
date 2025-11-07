@@ -84,8 +84,12 @@ const SliderCard = ({ id, category, title, description, image, cta, backgroundCo
       </div>
 
       <div className="w-[40%] h-[85%] my-auto p-[4vw]">
+
+        <div className="h-full w-full overflow-hidden rounded-[2vw]">
+
        
-        <Image width={1000} height={1000} src={image} alt={title} className="w-full h-full rounded-[2vw] object-cover" />
+        <Image width={1000} height={1000} src={image} alt={title} className="card-image w-full h-full rounded-[2vw] object-cover" />
+        </div>
       </div>
     </div>
   );
@@ -111,6 +115,21 @@ const Categories = () => {
         });
       });
 
+  const firstImage = cards[0].querySelector('.card-image');
+if (firstImage) {
+  gsap.to(firstImage, {
+    scale: 1.5,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger:containerRef.current,
+      start:'top bottom',
+      end: 'bottom bottom',
+      scrub:true,
+      // markers:true,
+    }
+  }, 0);
+}
+
       // Scroll-triggered timeline
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -122,6 +141,9 @@ const Categories = () => {
           // markers: true,
         },
       });
+
+      
+
 
       // Animate the sliding + rotation combo
       for (let i = 1; i < numCards; i++) {
@@ -136,6 +158,19 @@ const Categories = () => {
           },
           i - 1
         );
+
+        const currentCardImage = cards[i].querySelector('.card-image');
+        if (currentCardImage) {
+          tl.to(
+            currentCardImage,
+            {
+              scale: 1.5,
+              ease: "power2.out",
+            },
+            i - 1
+          );
+        }
+        
 
         // Simultaneously rotate & scale down previous card
 tl.to(

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import HoverTextReveal from "../button/Text";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -23,24 +24,30 @@ export default function Navbar() {
       {/* Left - Menu */}
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="flex items-center gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw] transition-all z-[10000]"
+        className="flex items-center group gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw] transition-all z-[10000]"
       >
-        <div className="flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative">
-          {/* Hamburger Lines */}
-          <span
-            className={`block h-px w-full bg-black transform ease-in-out transition-all duration-500 ${
-              menuOpen ? "rotate-45 translate-y-1.5" : "rotate-0 translate-y-0"
-            }`}
-          ></span>
-          <span
-            className={`block h-px w-full bg-black transform ease-in-out transition-all duration-600 ${
-              menuOpen ? "-rotate-45 translate-y-0.5" : "rotate-0 translate-y-0"
-            }`}
-          ></span>
-        </div>
+       <div className="flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative group cursor-pointer">
+  {/* Line 1 */}
+  <span
+    className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 group-hover:scale-x-0 ${
+      menuOpen ? "rotate-45 translate-y-1.5" : "rotate-0 translate-y-0 scale-x-100"
+    }`}
+  ></span>
+
+  {/* Line 2 */}
+  <span
+    className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 delay-[100ms] group-hover:scale-x-0 ${
+      menuOpen ? "-rotate-45 translate-y-0.5" : "rotate-0 translate-y-0 scale-x-100"
+    }`}
+  ></span>
+</div>
+
+
         <span className="text-[0.7vw] font-body font-semibold">
           {menuOpen ? "CLOSE" : "MENU"}
         </span>
+
+        {/* <HoverTextReveal /> */}
       </button>
 
       {/* Center - Logo */}
@@ -63,14 +70,20 @@ export default function Navbar() {
 
       {/* Overlay */}
       <div
-        className={`fixed top-0 left-0 z-[9999] w-screen h-screen navbar-clip-path bg-[#dfff81] transition-transform duration-500 ${
+        className={`fixed top-0 left-0 z-[9999] w-[105vw] h-screen navbar-clip-path  transition-all duration-700 ${
           menuOpen
-            ? "scale-100 opacity-100 pointer-events-auto"
-            : "scale-0 opacity-0 pointer-events-none"
+            ? "pointer-events-auto"
+            : "pointer-events-none"
         } origin-top-left`}
+        style={{
+          transform: menuOpen ? "scale(1)" : "scale(0)",
+          
+        }}
       >
         {/* Menu Content */}
-        <div className="flex flex-col items-end justify-end origin-left mr-[2.5vw] pb-[2.5vw] h-full text-center space-y-6">
+        <div className={`flex flex-col items-end justify-end origin-left mr-[7.5vw] pb-[2.5vw] h-full text-center space-y-6 transition-opacity duration-500 ${
+          menuOpen ? "opacity-100 delay-500" : "opacity-0"
+        }`}>
           <ul className="font-medium">
             {navItems.map((item, i) => (
               <li

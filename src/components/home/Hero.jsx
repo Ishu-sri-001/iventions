@@ -54,7 +54,7 @@ const Hero = () => {
           {
             scale: 1,
             ease: "linear",
-            duration: 1,
+            duration: 0.5,
           }
         )
 
@@ -64,12 +64,12 @@ const Hero = () => {
             delay: 0.5,
             rotateZ: 0,
             ease: "power1.out",
-            duration: 1,
+            duration: 0.5,
           }
         )
 
         .to(".hero-clip-path", {
-          duration: 1.5,
+          duration: 0.7,
           ease: "linear",
           clipPath:
             "polygon(59.15% 0%, 53.34% 51.47%, 0% 27.43%, 0% 100%, 62.32% 100%, 55.68% 55.08%, 90.6% 0%)",

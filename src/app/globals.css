@@ -47,7 +47,7 @@ body {
 }
 
 .clip-custom {
-  clip-path: polygon(62% 0, 91% 0, 56% 49%, 59% 100%, 0 100%, 0 28%, 50% 39%);
+  clip-path: polygon(59.15% 0%, 53.34% 51.47%, 6.5% 100%, 6.5% 100%, 55.68% 100%, 55.68% 55.08%, 90.6% 0%);
   background-color: #9C93E8;
 
 }
@@ -66,7 +66,7 @@ body {
 }
 
 .navbar-clip-path {
-  clip-path: polygon(0 0, 16% 0, 100% 25%, 100% 100%, 83% 100%, 0 7%);
+  clip-path: polygon(0% 0%, 16% 0%, 100% 25.75%, 100% 100%, 65% 100%, 0% 7%);
 border-bottom-right-radius: 5vw; /* adjust size */
     background-color: #E0FF98;
 }
