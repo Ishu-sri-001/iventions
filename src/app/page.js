@@ -6,6 +6,7 @@ import Categories from "@/components/home/Categories";
 import ProjectsDelievered from "@/components/home/ProjectsDelievered";
 import CaseStudy from "@/components/home/CaseStudy";
 import Insights from "@/components/home/Insights";
+import QuoteContact from "@/components/home/QuoteContact";
 
 export default function Home() {
   return (
@@ -18,7 +19,9 @@ export default function Home() {
 
       <CaseStudy />
       <Insights/>
+      <QuoteContact />
       <ProjectsDelievered />
+
     </>
   );
 }

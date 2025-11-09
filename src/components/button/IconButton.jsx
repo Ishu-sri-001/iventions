@@ -42,7 +42,7 @@ const IconButton = ({ icon, alt = "icon", size = "3vw", bg = "white" }) => {
       ref={buttonRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative flex items-center p-2 cursor-pointer justify-center w-[3.5vw] h-[${size}] rounded-[0.5vw] shadow-lg`}
+      className={`relative flex items-center p-1 cursor-pointer justify-center w-[3.5vw] h-[${size}] rounded-[0.5vw] shadow-lg`}
       style={{ backgroundColor: bg }}
     >
       <Image
