@@ -92,3 +92,32 @@ border-bottom-right-radius: 5vw; /* adjust size */
   clip-path: polygon(50% 0%, 100% 38%, 100% 100%, 0 100%, 0% 38%);
 }
 
+.link {
+  position: relative;
+  width: fit-content;
+  display: inline-block;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  bottom: -5%;
+  left: 0;
+  width: 100%;
+  background-color: black;
+  height: 1px; 
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.btn::after {
+    transition: transform 0.3s rase;
+}
+

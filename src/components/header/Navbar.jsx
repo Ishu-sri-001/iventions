@@ -8,7 +8,8 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  
+  const [hasAnimated, setHasAnimated] = useState(false);
+
   const projectOverlayRef = useRef(null);
   const animationRef = useRef(null);
 
@@ -24,92 +25,95 @@ export default function Navbar() {
   ];
 
   const getClipPathFromPosition = (x, width) => {
-    // Normalize x position to 0-1 range
     const normalizedX = x / width;
-    
-    // Both points move more extreme range
-    // Bottom-left X: moves from 5% to 85%
-    const bottomLeftX = 2 + (normalizedX * 80);
-    
-    // Left-side Y: moves from 20% to 95% (matching the 80% range)
-    const leftY = 2 + (normalizedX * 75);
-    
+    const bottomLeftX = 2 + normalizedX * 90;
+    const leftY = 2 + normalizedX * 75;
     return `polygon(100% 0%, 100% 6.7%, ${bottomLeftX}% 100%, 0% 100%, 0% ${leftY}%, 93.5% 0%)`;
   };
 
   const handleProjectHover = (e) => {
     if (!projectOpen || !projectOverlayRef.current) return;
-    
     const x = e.clientX;
     const width = window.innerWidth;
     const newClipPath = getClipPathFromPosition(x, width);
-    
-    // Cancel any ongoing animation
-    if (animationRef.current) {
-      animationRef.current.kill();
-    }
-    
-    // Animate to new clip path with GSAP
+
+    // Smooth hover distortion
     animationRef.current = gsap.to(projectOverlayRef.current, {
       clipPath: newClipPath,
-      duration: 0.3,
+      duration: 0.4,
       ease: "power2.out",
-      overwrite: true
+      overwrite: true,
     });
   };
 
   useEffect(() => {
     if (projectOpen && projectOverlayRef.current) {
-      // Animate in from center
-      const centerX = window.innerWidth / 2;
-      const initialClipPath = getClipPathFromPosition(centerX, window.innerWidth);
-      
+      // Reset clipPath once to prevent flicker
+      gsap.set(projectOverlayRef.current, {
+        clipPath:
+          "polygon(100% 0%, 100% 6.7%, 90% 100%, 0% 100%, 0% 75%, 93.5% 0%)",
+      });
+
+      // Open smoothly from top-right
       gsap.fromTo(
         projectOverlayRef.current,
         {
-          clipPath: "polygon(100% 0%, 100% 0%, 100% 0%, 100% 0%)",
-          opacity: 0
+          transformOrigin: "top right",
+          scale: 0,
+          opacity: 0,
         },
         {
-          clipPath: initialClipPath,
+          scale: 1,
           opacity: 1,
-          duration: 0.5,
-          ease: "power2.out"
+          duration: 0.7,
+          ease: "power3.inOut",
         }
       );
     } else if (!projectOpen && projectOverlayRef.current) {
+      // Close with identical smooth reverse animation
       gsap.to(projectOverlayRef.current, {
-        clipPath: "polygon(100% 0%, 100% 0%, 100% 0%, 100% 0%)",
+        transformOrigin: "top right",
+        scale: 0,
         opacity: 0,
-        duration: 0.3,
-        ease: "power2.in"
+        duration: 0.7,
+        ease: "power3.inOut",
       });
     }
   }, [projectOpen]);
+
+  const handleMenuHover = () => {
+    if (!hasAnimated) {
+      setHasAnimated(true);
+      setTimeout(() => setHasAnimated(false), 500);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 w-full h-[3vw] flex items-start justify-between z-50">
       {/* Left - Menu */}
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="flex items-center group gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw] transition-all z-[10000]"
+        onMouseEnter={handleMenuHover}
+        className="flex items-center group gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw] transition-all z-10000"
       >
         <div className="flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative group cursor-pointer">
-          {/* Line 1 */}
           <span
-            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 group-hover:scale-x-0 ${
+            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 ${
+              hasAnimated ? "scale-x-0" : "scale-x-100"
+            } ${
               menuOpen
-                ? "rotate-45 translate-y-1.5"
-                : "rotate-0 translate-y-0 scale-x-100"
+                ? "rotate-45 translate-y-[-0.5vw]"
+                : "rotate-0 translate-y-0"
             }`}
           ></span>
 
-          {/* Line 2 */}
           <span
-            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 delay-100 group-hover:scale-x-0 ${
+            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 delay-100 ${
+              hasAnimated ? "scale-x-0" : "scale-x-100"
+            } ${
               menuOpen
                 ? "-rotate-45 translate-y-0.5"
-                : "rotate-0 translate-y-0 scale-x-100"
+                : "rotate-0 translate-y-0"
             }`}
           ></span>
         </div>
@@ -133,23 +137,57 @@ export default function Navbar() {
       {/* Right - Got a Project */}
       <button
         onClick={() => setProjectOpen(!projectOpen)}
-        className="flex items-center gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-bl-[1vw] transition-all"
+        className="relative flex items-center justify-center z-[10001] gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group w-[13vw]"
       >
-        <span className="text-[0.7vw] font-body font-semibold">
-          GOT A PROJECT?
-        </span>
+        <div
+          className={`flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative transition-all duration-500`}
+        >
+          <span
+            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
+              projectOpen
+                ? "rotate-45 translate-y-[-0.5vw] opacity-100"
+                : "rotate-0 translate-y-0 opacity-0"
+            }`}
+          ></span>
+
+          <span
+            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
+              projectOpen
+                ? "-rotate-45 translate-y-[0.1vw] opacity-100"
+                : "rotate-0 translate-y-0 opacity-0"
+            }`}
+          ></span>
+        </div>
+
+        <div className="relative w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
+          <span
+            className={`absolute transition-all duration-500 font-body text-[0.7vw] font-semibold ${
+              projectOpen ? "opacity-0" : "translate-y-0 opacity-100"
+            }`}
+          >
+            GOT A PROJECT?
+          </span>
+          <span
+            className={`absolute transition-all duration-500 font-body text-[0.7vw] font-semibold ${
+              projectOpen
+                ? "translate-y-0 opacity-100"
+                : "translate-y-[0.5vw] opacity-0"
+            }`}
+          >
+            CLOSE
+          </span>
+        </div>
       </button>
 
       {/* MENU OVERLAY */}
       <div
-        className={`fixed top-0 left-0 z-[9999] w-[105vw] h-screen navbar-clip-path transition-all duration-700 ${
+        className={`fixed top-0 left-0 z-9999 w-[105vw] h-screen navbar-clip-path transition-all duration-700 ${
           menuOpen ? "pointer-events-auto" : "pointer-events-none"
         } origin-top-left`}
         style={{
           transform: menuOpen ? "scale(1)" : "scale(0)",
         }}
       >
-        {/* Menu Content */}
         <div
           className={`flex flex-col items-end justify-end origin-left mr-[7.5vw] pb-[2.5vw] h-full text-center space-y-6 transition-opacity duration-700 ${
             menuOpen ? "opacity-100 delay-500" : "opacity-0"
@@ -169,7 +207,7 @@ export default function Navbar() {
               >
                 <Link
                   href={item.href}
-                  className="font-third text-[4vw] text-right cursor-pointer transition-colors duration-300"
+                  className="font-third text-[4vw] text-right origin-right cursor-pointer transition-colors duration-300"
                 >
                   {item.title}
                 </Link>
@@ -182,15 +220,67 @@ export default function Navbar() {
       {/* PROJECT OVERLAY */}
       <div
         ref={projectOverlayRef}
-        className={`fixed top-0 left-0 z-[10000] w-[105vw] h-screen bg-yellow ${
+        className={`fixed top-0 left-0 z-10000 w-[105vw] h-screen bg-yellow ${
           projectOpen ? "pointer-events-auto" : "pointer-events-none"
         }`}
         onMouseMove={handleProjectHover}
         style={{
-          clipPath: "polygon(100% 0%, 100% 0%, 100% 0%, 100% 0%)",
-          opacity: 0
+          transformOrigin: "top right",
+          transform: projectOpen ? "scale(1)" : "scale(0)",
+          opacity: projectOpen ? 1 : 0,
         }}
-      ></div>
+      >
+        <div className="h-full w-full px-[2vw] flex ">
+          <div className="w-[50%] flex flex-col items-center justify-center">
+            <div className="w-[40%] cursor-pointer">
+              <p className="text-[1.8vw]  leading-[1.2]]  font-display pb-[2vw]">
+                Get a Quote
+              </p>
+
+              <div className="w-[28vw]   space-y-[2vw]">
+                <div className="group">
+                  <p className="text-[4vw]  relative  leading-[1.1]  font-third ">
+                    Have an event
+                    <span className="absolute bottom-0 scale-x-0 transition-all ease-out duration-1000 origin-left group-hover:scale-x-100 left-0 w-full h-[0.2px] bg-black"></span>
+                  </p>
+                  <p className="text-[4vw] w-fit relative  leading-[1.1]  font-third ">
+                    in mind ?
+                    <span className="absolute bottom-0 scale-x-0 transition-all ease-out duration-1000 origin-left group-hover:scale-x-100 left-0 w-full h-[0.2px] bg-black"></span>
+                  </p>
+                </div>
+                <p className="text-[1.3vw] w-[80%] font-medium  leading-[1.3]">
+                  Let's get you accurate numbers, strategic ideas, and a let's
+                  co-create your event–today.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-[50%] flex flex-col items-center justify-center">
+            <div className="w-[70%] cursor-pointer">
+              <p className="text-[1.8vw] leading-none  font-display pb-[2vw]">
+                Contact
+              </p>
+
+              <div className="w-[33vw]   space-y-[2vw]">
+                <div className="group">
+                  <p className="text-[4vw]  relative  leading-[1.1]  font-third ">
+                    Got a big version ?
+                    <span className="absolute bottom-0 scale-x-0 transition-all ease-in-out duration-400 origin-left group-hover:scale-x-100 left-0 w-full h-[0.2px] bg-black"></span>
+                  </p>
+                  <p className="text-[4vw] w-fit relative  leading-[1.1]  font-third ">
+                    or a big idea ?
+                    <span className="absolute bottom-0 scale-x-0 transition-all ease-in-out duration-400 origin-left group-hover:scale-x-100 left-0 w-full h-[0.2px] bg-black"></span>
+                  </p>
+                </div>
+                <p className="text-[1.3vw] w-[80%] font-medium  leading-[1.3]">
+                  We'll get you started or help you bigger dreams
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
   );
 }

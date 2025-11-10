@@ -11,8 +11,8 @@ const Insights = () => {
   const imageRefs = useRef([]);
   const imageWrapperRef = useRef(null);
   const containerRef = useRef(null);
-  const headingRefs = useRef([]); // ✅ separate refs
-  const contentRefs = useRef([]); // ✅ separate refs
+  const headingRefs = useRef([]); //  separate refs
+  const contentRefs = useRef([]); //  separate refs
 
   const baseRotateX = 5;
   const baseRotateY = -5;
@@ -114,9 +114,8 @@ const Insights = () => {
         }
       });
 
-      // === IMAGE SYNC ===
       gsap.to(".mid-nos", {
-        yPercent: -65,
+        yPercent: -62,
         ease: "linear",
         scrollTrigger: {
           trigger: "#insights",

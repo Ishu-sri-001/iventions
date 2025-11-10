@@ -7,6 +7,7 @@ import ProjectsDelievered from "@/components/home/ProjectsDelievered";
 import CaseStudy from "@/components/home/CaseStudy";
 import Insights from "@/components/home/Insights";
 import QuoteContact from "@/components/home/QuoteContact";
+import Footer from "@/components/footer/Footer";
 
 export default function Home() {
   return (
@@ -15,12 +16,11 @@ export default function Home() {
       <Hero />
       <About />
       <Categories />
-      
-
       <CaseStudy />
       <Insights/>
       <QuoteContact />
-      <ProjectsDelievered />
+      {/* <ProjectsDelievered /> */}
+      <Footer />
 
     </>
   );

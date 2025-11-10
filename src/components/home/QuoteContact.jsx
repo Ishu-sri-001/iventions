@@ -2,7 +2,6 @@
 import Image from "next/image";
 import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
-import Btn from "../button/Btn";
 import IconButton from "../button/IconButton";
 
 const QuoteContact = () => {
@@ -11,7 +10,14 @@ const QuoteContact = () => {
   const containerRef = useRef(null);
   const leftTriggerRef = useRef(null);
   const rightTriggerRef = useRef(null);
-  const [currentImage, setCurrentImage] = useState("/assets/img/party-1.jpeg");
+  const imageRefs = useRef([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const images = [
+    "/assets/img/party-1.jpeg", // default
+    "/assets/img/arena.jpeg",   // left hover
+    "/assets/img/party-2.jpeg", // right hover
+  ];
 
   useEffect(() => {
     const leftClip = leftClipRef.current;
@@ -19,67 +25,65 @@ const QuoteContact = () => {
     const leftTrigger = leftTriggerRef.current;
     const rightTrigger = rightTriggerRef.current;
 
-    // Left clip animations
-    const tlLeftEnter = gsap.timeline({ paused: true });
-    tlLeftEnter.to(
-      leftClip,
-      {
-        clipPath: "polygon(41% 0%, 61.5% 0%, 90.5% 100%, 12.25% 100%)",
-        duration: 0.3,
-        ease: "power2.out",
-      },
-      0
-    );
+    
+    const tlLeftEnter = gsap.timeline({ paused: true }).to(leftClip, {
+      clipPath: "polygon(41% 0%, 61.5% 0%, 90.5% 100%, 12.25% 100%)",
+      duration: 0.4,
+      ease: "power2.out",
+    });
 
-    const tlLeftLeave = gsap.timeline({ paused: true });
-    tlLeftLeave.to(
-      leftClip,
-      {
-        clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
-        duration: 0.5,
-        ease: "power2.out",
-      },
-      0
-    );
+    const tlLeftLeave = gsap.timeline({ paused: true }).to(leftClip, {
+      clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
+      duration: 0.4,
+      ease: "power2.inOut",
+    });
 
-    // Right clip animations
-    const tlRightEnter = gsap.timeline({ paused: true });
-    tlRightEnter.to(
-      rightClip,
-      {
-        clipPath: "polygon(41% 0%, 61.5% 0%, 90.5% 100%, 12.25% 100%)",
-        duration: 0.5,
-        ease: "power2.out",
-      },
-      0
-    );
+    const tlRightEnter = gsap.timeline({ paused: true }).to(rightClip, {
+      clipPath: "polygon(41% 0%, 61.5% 0%, 90.5% 100%, 12.25% 100%)",
+      duration: 0.4,
+      ease: "power2.out",
+    });
 
-    const tlRightLeave = gsap.timeline({ paused: true });
-    tlRightLeave.to(
-      rightClip,
-      {
-        clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
-        duration: 0.3,
+    const tlRightLeave = gsap.timeline({ paused: true }).to(rightClip, {
+      clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
+      duration: 0.4,
+      ease: "power2.inOut",
+    });
+
+  
+    const crossfadeTo = (index) => {
+      const current = imageRefs.current[activeIndex];
+      const next = imageRefs.current[index];
+
+      if (index === activeIndex) return;
+
+      gsap.set(next, { opacity: 0, zIndex: 2 });
+      gsap.to(current, { opacity: 0, duration: 0.2, ease: "power2.inOut" });
+      gsap.to(next, {
+        opacity: 1,
+        duration: 0.2,
         ease: "power2.inOut",
-      },
-      0
-    );
+        onComplete: () => {
+          setActiveIndex(index);
+        },
+      });
+    };
 
     const onLeftEnter = () => {
       tlLeftEnter.play(0);
-      setCurrentImage("/assets/img/arena.jpeg");
+      crossfadeTo(1);
     };
     const onLeftLeave = () => {
       tlLeftLeave.play(0);
-      setCurrentImage("/assets/img/party-1.jpeg");
+      crossfadeTo(0);
     };
     const onRightEnter = () => {
       tlRightEnter.play(0);
-      setCurrentImage("/assets/img/party-2.jpeg");
+      crossfadeTo(2);
     };
     const onRightLeave = () => {
       tlRightLeave.play(0);
-      setCurrentImage("/assets/img/party-1.jpeg");
+      crossfadeTo(0);
     };
 
     leftTrigger.addEventListener("mouseenter", onLeftEnter);
@@ -93,84 +97,107 @@ const QuoteContact = () => {
       rightTrigger.removeEventListener("mouseenter", onRightEnter);
       rightTrigger.removeEventListener("mouseleave", onRightLeave);
     };
-  }, []);
+  }, [activeIndex]);
 
   return (
-    <section ref={containerRef} className="w-full h-screen relative overflow-hidden">
-      {/* Image */}
-      <Image
-        key={currentImage}
-        src={currentImage}
-        height={1000}
-        width={1000}
-        alt="contact-img"
-        className="h-full w-full object-cover duration-300 ease-in-out  "
-      />
+    <section
+      ref={containerRef}
+      className="w-full h-screen relative overflow-hidden bg-black"
+    >
+      {/* ✅ Image Layer Stack */}
+      <div className="absolute inset-0">
+        {images.map((src, i) => (
+          <Image
+            key={src}
+            ref={(el) => (imageRefs.current[i] = el)}
+            src={src}
+            fill
+            alt="contact-img"
+            className={`object-cover absolute top-0 left-0 transition-opacity duration-500 ${
+              i === activeIndex ? "opacity-100 z-[1]" : "opacity-0 z-0"
+            }`}
+            priority
+          />
+        ))}
+      </div>
 
-      <div className="absolute font-third z-0 top-[35%] left-[15%] underline text-[6.5vw] text-yellow">
-          Quote
+      {/* Headings */}
+      <div className="absolute font-third z-5 top-[35%] left-[15%]  text-[6.5vw] text-yellow">
+        Quote
       </div>
-       <div className="underline absolute font-third z-0 top-[35%] right-[13%] text-[6.5vw] text-yellow">
-          Contact
+      <div className="w-[20vw] bg-yellow h-[0.2px] absolute top-[51%] left-[15%] z-5" />
+      <div className=" absolute font-third z-5 top-[35%] right-[13%] text-[6.5vw] text-yellow">
+        Contact
       </div>
+      <div className="w-[22vw] bg-yellow h-[0.2px] absolute top-[51%] right-[13%] z-5" />
 
       {/* Left Clip Path */}
       <div
         ref={leftClipRef}
-        className="absolute flex flex-col cursor-pointer items-center py-[2vw] gap-[9.5vw] top-0 left-0 w-1/2 h-full bg-[#E0FF98] pointer-events-none"
+        className="absolute flex z-10  flex-col cursor-pointer items-center py-[2vw] gap-[12vw] top-0 left-0 w-1/2 h-full bg-[#E0FF98]"
         style={{
           clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
         }}
-        
       >
-        <p className="text-[1.8vw] leading-none text-center font-third w-[8vw]">Your spotlights waiting</p>
+        <p className="text-[1.8vw] leading-none text-center font-third w-[8vw]">
+          Your spotlights waiting
+        </p>
 
-        <div className="w-[22vw]  space-y-[2vw]">
+        <div className="w-[22vw] space-y-[2vw]">
+          <p className="text-[3.2vw] text-center leading-[1.2] font-bold font-display">
+            Have an event in mind ?
+          </p>
+          <p className="text-[1.3vw] font-medium text-center leading-[1.3]">
+            Let's get you accurate numbers, strategic ideas, and co-create your
+            event today.
+          </p>
 
-        <p className="text-[3.2vw] text-center leading-[1.2] font-bold font-display">Have an event in mind ?</p>
-        <p className="text-[1.3vw] font-medium text-center leading-[1.3]">Let's get you accurate numbers, strategic ideas, and a let's co-create your event–today.</p>
-
-        <div className="w-fit mx-auto flex items-center gap-[1vw]">
-         <p className="text-[0.8vw] font-semibold font-display uppercase">Get a custom  quote</p>
-         <IconButton icon='/assets/icons/arrow.svg' size="2vw" />
+          <div className="w-fit mx-auto flex items-center gap-[1vw]">
+            <p className="text-[0.8vw] font-semibold font-display uppercase">
+              Get a custom quote
+            </p>
+            <IconButton icon="/assets/icons/arrow.svg" size="2vw" />
+          </div>
         </div>
-        </div>
-
-        
       </div>
 
       {/* Right Clip Path */}
       <div
         ref={rightClipRef}
-        className="absolute flex flex-col cursor-pointer items-center gap-[9.5vw] py-[2vw] pl-[1.2vw] top-0 right-0 w-1/2 h-full bg-[#E0FF98] pointer-events-none"
+        className="absolute flex z-10 flex-col cursor-pointer items-center gap-[12vw] py-[2vw] pl-[1.2vw] top-0 right-0 w-1/2 h-full bg-[#E0FF98] "
         style={{
           clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
         }}
       >
-         <p className="text-[1.8vw] leading-none text-center font-third w-[8vw]">Your spotlights waiting</p>
+        <p className="text-[1.8vw] leading-none text-center font-third w-[8vw]">
+          Your spotlights waiting
+        </p>
 
-        <div className="w-[22vw]  space-y-[2vw]">
+        <div className="w-[22vw] space-y-[2vw]">
+          <p className="text-[3.2vw] text-center leading-[1.2] font-bold font-display">
+            Got questions ? A wild idea ?
+          </p>
+          <p className="text-[1.3vw] font-medium text-center leading-[1.3]">
+            We'll get you started or help you dream bigger.
+          </p>
 
-        <p className="text-[3.2vw] text-center leading-[1.2] font-bold font-display">Got questions ? A wild idea ?</p>
-        <p className="text-[1.3vw] font-medium text-center leading-[1.3]">We'll get you started or help you dream bigger.</p>
-
-        <div className="w-fit mx-auto flex items-center gap-[1vw]">
-         <p className="text-[0.8vw] font-semibold font-display uppercase">Contact us</p>
-         <IconButton icon='/assets/icons/arrow.svg' size="2vw" />
-        </div>
+          <div className="w-fit mx-auto flex items-center gap-[1vw]">
+            <p className="text-[0.8vw] font-semibold font-display uppercase">
+              Contact us
+            </p>
+            <IconButton icon="/assets/icons/arrow.svg" size="2vw" />
+          </div>
         </div>
       </div>
 
-      {/* Left Trigger Area */}
+      {/* Trigger Areas */}
       <div
         ref={leftTriggerRef}
-        className="absolute top-0 left-0 w-1/2 h-full z-10"
+        className="absolute top-0 left-[10%] w-[28%] h-full z-10"
       ></div>
-
-      {/* Right Trigger Area */}
       <div
         ref={rightTriggerRef}
-        className="absolute top-0 right-0 w-1/2 h-full z-10"
+        className="absolute top-0 right-[10%] w-[28%] h-full z-10"
       ></div>
     </section>
   );

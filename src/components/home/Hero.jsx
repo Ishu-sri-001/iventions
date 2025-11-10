@@ -37,7 +37,7 @@ const Hero = () => {
         scale: 0,
         rotateZ: -180,
         clipPath:
-          "polygon(59.15% 0%, 53.34% 51.47%, 15.75% 100%, 15.75% 100%, 46.32% 100%, 55.56% 53.75%, 90.6% 0%)",
+          "polygon(59.15% 0%, 53.34% 51.47%, 15.75% 100%, 15.75% 100%, 45.32% 100%, 53.74% 51.47%, 86.1% 0%)",
         transformOrigin: "center center",
       });
 
@@ -77,7 +77,7 @@ const Hero = () => {
         
         .to(videoRef.current, {
           opacity: 1,
-        });
+        }, '-=0.5');
       
     });
     return () => ctx.revert();
@@ -185,7 +185,7 @@ const Hero = () => {
       {/* CLIP BACKGROUND LAYER */}
       <div
         ref={clipRef}
-        className="absolute left-[-30%] bottom-[-30%] clip-start opacity-0 scale-0 origin-center hero-clip-path w-[150vw] h-[155vh] mix-blend-multiply z-0"
+        className="absolute left-[-30%] bottom-[-30%] clip-start opacity-0 scale-0 origin-center hero-clip-path w-[155vw] h-[155vh] mix-blend-multiply z-0"
       />
 
       {/* TEXT LAYER */}
