@@ -149,7 +149,7 @@ const Footer = () => {
       </div>
 
       {/* BOTTOM SVG SECTION */}
-      <div className='relative w-full h-[35%] bg-[#1E1E1E] overflow-hidden'>
+      <div className='relative w-full h-[25%] bg-[#1E1E1E] overflow-hidden'>
         {/* BASE SVG */}
         <svg preserveAspectRatio="none" width="100%" height="100%" viewBox="0 0 1856 266" className="absolute inset-0">
           {/* Dark paths */}

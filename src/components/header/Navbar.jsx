@@ -47,39 +47,46 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    if (projectOpen && projectOverlayRef.current) {
-      // Reset clipPath once to prevent flicker
-      gsap.set(projectOverlayRef.current, {
-        clipPath:
-          "polygon(100% 0%, 100% 6.7%, 90% 100%, 0% 100%, 0% 75%, 93.5% 0%)",
-      });
+  const overlay = projectOverlayRef.current;
+  if (!overlay) return;
 
-      // Open smoothly from top-right
-      gsap.fromTo(
-        projectOverlayRef.current,
-        {
-          transformOrigin: "top right",
-          scale: 0,
-          opacity: 0,
-        },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 0.7,
-          ease: "power3.inOut",
-        }
-      );
-    } else if (!projectOpen && projectOverlayRef.current) {
-      // Close with identical smooth reverse animation
-      gsap.to(projectOverlayRef.current, {
-        transformOrigin: "top right",
+  if (projectOpen) {
+    // Prepare for animation
+    gsap.set(overlay, {
+      clipPath:
+        "polygon(100% 0%, 100% 2.7%, 55.75% 100%, 0% 100%, 0% 68.5%, 93.5% 0%)",
+        
+        borderBottomLeftRadius: "5vw",
+       transformOrigin: "top right",
+    });
+
+    // Animate IN from top right
+    gsap.fromTo(
+      overlay,
+      {
         scale: 0,
         opacity: 0,
-        duration: 0.7,
+      },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.8,
         ease: "power3.inOut",
-      });
-    }
-  }, [projectOpen]);
+      }
+    );
+  } else {
+    // Animate OUT in the same direction (toward top right)
+    gsap.to(overlay, {
+        scale: 0,
+      opacity: 0,
+      transformOrigin: "top right",
+      duration: 0.8,
+      ease: "power3.inOut",
+      
+    });
+  }
+}, [projectOpen]);
+
 
   const handleMenuHover = () => {
     if (!hasAnimated) {
@@ -137,7 +144,7 @@ export default function Navbar() {
       {/* Right - Got a Project */}
       <button
         onClick={() => setProjectOpen(!projectOpen)}
-        className="relative flex items-center justify-center z-[10001] gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group w-[13vw]"
+        className="relative flex items-center justify-center z-[10002] gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group w-[13vw]"
       >
         <div
           className={`flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative transition-all duration-500`}
@@ -178,6 +185,8 @@ export default function Navbar() {
           </span>
         </div>
       </button>
+
+      
 
       {/* MENU OVERLAY */}
       <div
@@ -220,14 +229,14 @@ export default function Navbar() {
       {/* PROJECT OVERLAY */}
       <div
         ref={projectOverlayRef}
-        className={`fixed top-0 left-0 z-10000 w-[105vw] h-screen bg-yellow ${
+        className={`fixed top-[1vw] left-[-5vw] z-10001 w-[105vw] h-screen bg-yellow ${
           projectOpen ? "pointer-events-auto" : "pointer-events-none"
         }`}
         onMouseMove={handleProjectHover}
         style={{
           transformOrigin: "top right",
           transform: projectOpen ? "scale(1)" : "scale(0)",
-          opacity: projectOpen ? 1 : 0,
+          
         }}
       >
         <div className="h-full w-full px-[2vw] flex ">
@@ -281,6 +290,23 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+              {/* BLACK OVERLAY for MENU */}
+      <div
+        className={`fixed inset-0 bg-black transition-opacity duration-700 ${
+          menuOpen ? "opacity-60" : "opacity-0"
+        } pointer-events-none z-[9998]`}
+      ></div>
+
+      {/* BLACK OVERLAY for PROJECT (higher z-index) */}
+      <div
+        className={`fixed inset-0 bg-black transition-opacity duration-700 ${
+          projectOpen ? "opacity-60" : "opacity-0"
+        } pointer-events-none z-[10000]`}
+      ></div>
+
+
+
     </nav>
   );
 }

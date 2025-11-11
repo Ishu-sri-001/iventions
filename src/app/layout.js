@@ -1,36 +1,24 @@
-
 import "./globals.css";
 import localFont from "next/font/local";
 import LenisSmoothScroll from "@/components/Lenis/LenisScroll";
-
+import PageTransition from "@/components/page-transition/PageTransition";
 const Font1 = localFont({
-  src: [
-    { path: "./fonts/font1.woff2", weight: "300", style: "normal" },
-  ],
-  variable: '--font-body',
+  src: [{ path: "./fonts/font1.woff2", weight: "300", style: "normal" }],
+  variable: "--font-body",
   display: "swap",
-  fallback:["system-ui, sans-serif"],
-})
+});
 
 const Font2 = localFont({
-  src: [
-    { path: "./fonts/font2.woff2", weight: "400", style: "normal" },
-  ],
-  variable: '--font-display',
+  src: [{ path: "./fonts/font2.woff2", weight: "400", style: "normal" }],
+  variable: "--font-display",
   display: "swap",
-  fallback:["system-ui, sans-serif"],
-})
+});
 
 const Font3 = localFont({
-  src: [
-    { path: "./fonts/font3.woff2", weight: "400", style: "normal" },
-  ],
-  variable: '--font-third',
+  src: [{ path: "./fonts/font3.woff2", weight: "400", style: "normal" }],
+  variable: "--font-third",
   display: "swap",
-  fallback:["system-ui, sans-serif"],
-})
-
-
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -40,10 +28,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-              <LenisSmoothScroll />
+      <body className={`${Font1.variable} ${Font2.variable} ${Font3.variable} antialiased`}>
+        <LenisSmoothScroll />
 
-       <body className={`${Font1.variable} ${Font2.variable} ${Font3.variable} antialiased`}>
-        {children}
+     
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );

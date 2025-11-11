@@ -48,8 +48,8 @@ const Insights = () => {
       const total = heading.length;
 
       heading.forEach((_, i) => {
-        const startPos = (i / total) * 100;
-        const endPos = ((i + 1) / total) * 100;
+        const startPos = (i / total) * 70;
+        const endPos = ((i + 1) / total) * 80;
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -57,7 +57,7 @@ const Insights = () => {
             start: `${startPos}% top`,
             end: `${endPos}% top`,
             scrub: true,
-            markers: false,
+            // markers: true,
           },
         });
 
@@ -120,10 +120,9 @@ const Insights = () => {
         scrollTrigger: {
           trigger: "#insights",
           start: "top top",
-          end: "bottom top",
-          pin: true,
+          end: "bottom bottom",
           scrub: true,
-          markers: false,
+          // markers: true,
           onUpdate: (self) => {
             const progress = self.progress;
             const total = imageSources.length;
@@ -141,12 +140,12 @@ const Insights = () => {
       });
 
       gsap.to(".mid-nos-top", {
-        yPercent: -65,
+        yPercent: -62,
         ease: "linear",
         scrollTrigger: {
           trigger: "#insights",
           start: "top top",
-          end: "bottom top",
+          end: "bottom bottom",
           scrub: true,
           markers: false,
         },
@@ -199,8 +198,12 @@ const Insights = () => {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="w-screen h-screen bg-[#F3EFEB] relative z-0 flex items-center justify-between px-[5vw] overflow-hidden"
+      className="w-screen !h-[250vh] bg-[#F3EFEB] relative z-0  "
     >
+
+      <div className="h-screen w-full overflow-hidden sticky top-0 flex items-center justify-between px-[5vw]">
+
+     
       {/* === IMAGE STACK === */}
       <div
         ref={imageWrapperRef}
@@ -292,6 +295,7 @@ const Insights = () => {
           ))}
         </div>
       </div>
+       </div>
     </section>
   );
 };

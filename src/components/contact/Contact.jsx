@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
+import Btn from '../button/Btn';
 
 const Contact = () => {
   const [activeForm, setActiveForm] = useState('quote');
@@ -160,9 +161,7 @@ const Contact = () => {
               />
             </div>
 
-            <button className="bg-yellow text-gray-900 font-medium px-[2vw] cursor-pointer py-[0.5vw] rounded-[0.6vw] transition-colors">
-              NEXT
-            </button>
+            <Btn text='Next' bgColor='bg-yellow px-[2vw] py-[0.8vw]' />
           </div>
         </div>
 
@@ -249,9 +248,10 @@ const Contact = () => {
                 />
               </div>
 
-              <button className="bg-[#9C93E8] cursor-pointer text-white font-medium px-[2vw] py-[0.5vw] rounded-[0.6vw] transition-colors">
+              {/* <button className="bg-[#9C93E8] cursor-pointer text-white font-medium px-[2vw] py-[0.5vw] rounded-[0.6vw] transition-colors">
                 SEND
-              </button>
+              </button> */}
+              <Btn text='send' bgColor='bg-[#9C93E8] px-[2vw] py-[0.8vw]' />
             </div>
           </div>
         </div>

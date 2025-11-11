@@ -1,7 +1,8 @@
 "use client";
 import React, { useRef } from "react";
+import { gsap } from "gsap";
 
-const Btn = ({ text = "Get to know us" }) => {
+const Btn = ({ text = "Get to know us", bgColor = 'bg-white' }) => {
   const buttonRef = useRef(null);
 
   const handleMouseMove = (e) => {
@@ -17,23 +18,27 @@ const Btn = ({ text = "Get to know us" }) => {
     const rotateX = ((y - centerY) / centerY) * maxTilt;
     const rotateY = ((x - centerX) / centerX) * maxTilt;
 
-    buttonRef.current.style.transition = "transform 0.15s linear";
-    buttonRef.current.style.transform = `
-      perspective(600px)
-      rotateX(${-rotateX}deg)
-      rotateY(${rotateY}deg)
-      scale(1.08)
-    `;
+    gsap.to(buttonRef.current, {
+      duration: 0.5,
+      rotationX: -rotateX,
+      rotationY: rotateY,
+      // scale: 1.08,
+      transformPerspective: 600,
+      ease: "power2.out",
+      overwrite: "auto"
+    });
   };
 
   const handleMouseLeave = () => {
-    buttonRef.current.style.transition = "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
-    buttonRef.current.style.transform = `
-      perspective(600px)
-      rotateX(0deg)
-      rotateY(0deg)
-      scale(1)
-    `;
+    gsap.to(buttonRef.current, {
+      duration: 0.6,
+      rotationX: 0,
+      rotationY: 0,
+      // scale: 1,
+      transformPerspective: 600,
+      ease: "power2.out",
+      overwrite: "auto"
+    });
   };
 
   return (
@@ -41,7 +46,7 @@ const Btn = ({ text = "Get to know us" }) => {
       ref={buttonRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative px-[2vw] py-[1vw] w-fit bg-white font-body uppercase text-black text-[0.8vw] font-semibold rounded-xl shadow-lg"
+      className={`relative px-[1vw] py-[0.5vw] cursor-pointer w-fit  font-body uppercase text-black text-[0.7vw] font-semibold rounded-sm ${bgColor}`}
     >
       {text}
     </button>

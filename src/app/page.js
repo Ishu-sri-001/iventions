@@ -18,7 +18,7 @@ export default function Home() {
       <Categories />
       <CaseStudy />
       <Insights/>
-      <QuoteContact />
+      {/* <QuoteContact /> */}
       {/* <ProjectsDelievered /> */}
       <Footer />
 

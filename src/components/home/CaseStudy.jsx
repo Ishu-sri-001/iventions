@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import SplitText from "gsap/dist/SplitText";
+import IconButton from "../button/IconButton";
+import Btn from "../button/Btn";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -52,20 +54,22 @@ export default function PageReveal() {
       yPercent: 35,
       scrollTrigger: {
         trigger: "#case-study",
-        start: "40% 72%",
+        start: "40% bottom",
         end: "140% bottom",
         scrub: true,
         ease: "none",
+        // markers:true,
       },
     });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#case-study",
-        start: "50% 90%",
-        end: "40% top",
+        start: "25% bottom",
+        end: "bottom 80%",
         scrub: true,
         ease: "none",
+        // markers:true,
       },
     });
 
@@ -78,14 +82,14 @@ export default function PageReveal() {
       {
         clipPath:
           "polygon(100% 50%, 0% 100%, 0% 100%, 0% 49.5%, 0% 0%, 0% 0%)",
-        duration: 1.9,
+        duration: 2.5,
         ease: "none",
       }
     )
       .to(".overlay-layer", {
         clipPath:
           "polygon(100% 50%, 100% 100%, 0% 100%, 0% 49.5%, 0% 0%, 100% 0%)",
-        duration: 1.9,
+        duration: 2.5,
         ease: "none",
       })
       .fromTo(
@@ -100,11 +104,9 @@ export default function PageReveal() {
     };
   }, []);
 
-  
+  // --- Smooth SplitText Animation ---
   const animateTextIn = () => {
-    
-
-    const split = new SplitText('.quote-text', {
+    const split = new SplitText(".quote-text", {
       type: "lines",
       linesClass: "line",
       mask: "lines",
@@ -113,34 +115,59 @@ export default function PageReveal() {
     gsap.fromTo(
       split.lines,
       { yPercent: 100 },
-      { yPercent: 0, 
-        stagger: 0.1, 
-        ease: "power2.out", 
-        // duration:1.5,
+      {
+        yPercent: 0,
+        stagger: 0.05,
+        ease: "power2.inOut",
+        duration: 0.7,
       }
     );
   };
 
-  // --- Animate Slide Change ---
-  const animateSlideChange = async (direction) => {
+  const animateSlideChange = (direction) => {
     if (isAnimating) return;
     setIsAnimating(true);
 
-    setCurrentSlide((prev) =>
-      direction === "next"
-        ? (prev + 1) % sliderData.length
-        : (prev - 1 + sliderData.length) % sliderData.length
-    );
+    // exit animation before content changes
+    const oldSplit = new SplitText(".quote-text", { 
+      type: "lines",
+      mask:'lines'
+    });
 
-    // wait for React to render the new quote
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // instantly change content after exit animation
+        setCurrentSlide((prev) =>
+          direction === "next"
+            ? (prev + 1) % sliderData.length
+            : (prev - 1 + sliderData.length) % sliderData.length
+        );
+      },
+    });
 
-    // animateTextIn();
-    setIsAnimating(false);
+    tl.to(oldSplit.lines, {
+      yPercent: -100,
+      stagger: 0.04,
+      ease: "power2.inOut",
+      duration: 0.5,
+    });
   };
 
   useEffect(() => {
-    animateTextIn();
+    // Animate new text in after React re-renders instantly
+    const ctx = gsap.context(() => {
+      animateTextIn();
+    });
+
+    // mark animation done after entry anim
+    const timeout = setTimeout(() => {
+      setIsAnimating(false);
+    }, 800);
+
+    return () => {
+      ctx.revert();
+      clearTimeout(timeout);
+    };
   }, [currentSlide]);
 
   const currentData = sliderData[currentSlide];
@@ -187,14 +214,12 @@ export default function PageReveal() {
               )}
             </div>
 
-           
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mt-20">
               {/* Quote */}
               <div
                 key={currentData.id}
                 className="quote-text md:w-1/2 text-[1.5rem] leading-snug font-serif overflow-hidden"
               >
-                  
                 "{currentData.quote}"
               </div>
 
@@ -224,68 +249,33 @@ export default function PageReveal() {
             {/* Navigation */}
             <div className="flex justify-between items-center mt-20">
               <div className="flex gap-2">
-                <button
-                  onClick={() => animateSlideChange("prev")}
-                  disabled={isAnimating}
-                  className="p-2 bg-white cursor-pointer rounded-md  transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 19.5L8.25 12l7.5-7.5"
-                    />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => animateSlideChange("next")}
-                  disabled={isAnimating}
-                  className="p-2  rounded-md cursor-pointer bg-white transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </button>
+                <div onClick={() => animateSlideChange("prev")}>
+                  <IconButton
+                    icon="/assets/icons/prev-icon.svg"
+                    pad="w-[3.5vw]"
+                  />
+                </div>
+                <div onClick={() => animateSlideChange("next")}>
+                  <IconButton
+                    icon="/assets/icons/next-icon.svg"
+                    pad="w-[3.5vw]"
+                  />
+                </div>
               </div>
 
-              <div className="text-sm text-gray-500 tracking-widest">
-                {String(currentSlide + 1).padStart(2, "0")} /{" "}
-                {String(sliderData.length).padStart(2, "0")}
+              <div className="text-sm text-gray-500 flex gap-[0.3vw] tracking-widest">
+                <span className="quote-text">
+                  {String(currentSlide + 1).padStart(2, "0")}
+                </span>
+                <span>/ {String(sliderData.length).padStart(2, "0")}</span>
               </div>
 
-             
+              <div>
+                <Btn text="SEE FULL CASE STUDY" />
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Static Background Layer */}
-        {/* <div className="background-layer absolute inset-0 flex flex-col items-center justify-center text-white text-center px-8">
-          <h1 className="text-6xl md:text-8xl font-bold mb-4">
-            Revealed Vision
-          </h1>
-          <p className="text-2xl max-w-2xl">
-            Crafted through layers of creativity and precision. Watch the story
-            unfold.
-          </p>
-        </div> */}
       </section>
     </div>
   );

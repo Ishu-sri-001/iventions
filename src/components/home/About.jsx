@@ -190,23 +190,21 @@ export default function ClippedTextSection() {
   const prevSlide = () =>
     changeSlide((currentSlide - 1 + slides.length) % slides.length);
 
-  // Handle mouse movement
+  // Handle mouse movement - smooth GSAP animation
   const handleMouseMove = (e) => {
-    if (!isSliderActive) return;
+    if (!isSliderActive || !cursorRef.current) return;
     const x = e.clientX;
     const y = e.clientY;
     setMousePosition({ x, y });
-
-    // Very smooth follow with GSAP
-    if (cursorRef.current) {
-      gsap.to(cursorRef.current, {
-        x: x,
-        y: y,
-        duration: 0.6,
-        ease: "power3.out",
-        overwrite: "auto",
-      });
-    }
+    
+    // Smooth GSAP animation with overwrite to prevent conflicts
+    gsap.to(cursorRef.current, {
+      x: x,
+      y: y,
+      duration: 0.6,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
   };
 
   // Handle click on screen halves
@@ -355,7 +353,7 @@ export default function ClippedTextSection() {
         )}
 
         {/* Custom cursor text */}
-        {isSliderActive && isMouseInSlider && (
+        {isSliderActive && (
           <div
             ref={cursorRef}
             className="absolute pointer-events-none z-50 text-black text-[0.7vw] font-semibold font-body bg-yellow backdrop-blur-sm h-[8vw] w-[8vw] rounded-full flex items-center justify-center uppercase"
@@ -363,6 +361,8 @@ export default function ClippedTextSection() {
               left: 0,
               top: 0,
               transform: "translate(-50%, -50%)",
+              opacity: isMouseInSlider ? 1 : 0,
+              transition: "opacity 0.3s ease",
             }}
           >
             {getCursorText()}

@@ -75,7 +75,7 @@ const SliderCard = ({ id, category, title, description, image, cta, backgroundCo
           <button className="flex items-center gap-[1vw] text-[2vw] font-semibold  transition-all">
             {cta}
             
-            <IconButton icon='/assets/icons/arrow.svg' />
+            <IconButton icon='/assets/icons/arrow.svg' height='4vw' pad="w-[4.5vw]" />
           </button>
 
           {/* <Btn /> */}
@@ -137,7 +137,7 @@ if (firstImage) {
           start: "top top",
           end: `+=${(numCards - 1) * 100}%`,
           scrub: true,
-          pin: true,
+          // pin: true,
           // markers: true,
         },
       });
@@ -198,19 +198,22 @@ tl.to(
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-screen h-screen bg-black overflow-hidden"
+    <section className="relative h-[380vh] w-full z-0">
+
+    <div ref={containerRef} className="sticky top-0 w-screen h-screen bg-black overflow-hidden"
       style={{ perspective: "1200px" }}
-    >
+      >
       {categoriesData.map((category, i) => (
         <div
-          key={category.id}
-          ref={(el) => (cardsRef.current[i] = el)}
-          className="absolute inset-0"
+        key={category.id}
+        ref={(el) => (cardsRef.current[i] = el)}
+        className="absolute inset-0"
         >
           <SliderCard {...category} />
         </div>
       ))}
     </div>
+      </section>
   );
 };
 
