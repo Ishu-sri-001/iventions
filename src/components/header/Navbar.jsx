@@ -40,7 +40,7 @@ export default function Navbar() {
     const normalizedX = x / width;
     const bottomLeftX = 2 + normalizedX * 90;
     const leftY = 2 + normalizedX * 75;
-    return `polygon(100% 0%, 100% 6.7%, ${bottomLeftX}% 100%, 0% 100%, 0% ${leftY}%, 93.5% 0%)`;
+    return `polygon(100% 0%, 100% 6.7%, ${bottomLeftX}% 100%, 0% 100%, 0% ${leftY}%, 90% 0%)`;
   };
 
   const handleProjectHover = (e) => {
@@ -66,7 +66,7 @@ export default function Navbar() {
     // Prepare for animation
     gsap.set(overlay, {
       clipPath:
-        "polygon(100% 0%, 100% 2.7%, 55.75% 100%, 0% 100%, 0% 68.5%, 93.5% 0%)",
+        "polygon(100% 0%, 100% 9.7%, 66.25% 100%, 0% 100%, 0% 75.25%, 92% 0%)",
         
         borderBottomLeftRadius: "5vw",
        transformOrigin: "top right",
@@ -241,7 +241,7 @@ export default function Navbar() {
       {/* PROJECT OVERLAY */}
       <div
         ref={projectOverlayRef}
-        className={`fixed top-[1vw] left-[-5vw] z-10001 w-[105vw] h-screen bg-yellow ${
+        className={`fixed top-[-5%] z-10001 left-[-5%] w-[105vw] h-[120vh] bg-yellow ${
           projectOpen ? "pointer-events-auto" : "pointer-events-none"
         }`}
         onMouseMove={handleProjectHover}

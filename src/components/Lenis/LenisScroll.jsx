@@ -22,7 +22,7 @@ const LenisSmoothScroll = () => {
       root
       options={{
         autoRaf: false,
-        duration: 5,
+        duration: 1.2,
         infinite:false,
       }}
       ref={lenisRef}

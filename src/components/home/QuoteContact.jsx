@@ -27,7 +27,7 @@ const QuoteContact = () => {
 
     
     const tlLeftEnter = gsap.timeline({ paused: true }).to(leftClip, {
-      clipPath: "polygon(41% 0%, 61.5% 0%, 90.5% 100%, 12.25% 100%)",
+      clipPath: "polygon(41% 0%, 61.5% 0%, 95.75% 100%, 3.75% 100%)",
       duration: 0.4,
       ease: "power2.out",
     });
@@ -39,7 +39,7 @@ const QuoteContact = () => {
     });
 
     const tlRightEnter = gsap.timeline({ paused: true }).to(rightClip, {
-      clipPath: "polygon(41% 0%, 61.5% 0%, 90.5% 100%, 12.25% 100%)",
+      clipPath: "polygon(41% 0%, 61.5% 0%, 95.75% 100%, 3.25% 100%)",
       duration: 0.4,
       ease: "power2.out",
     });
@@ -134,7 +134,7 @@ const QuoteContact = () => {
       {/* Left Clip Path */}
       <div
         ref={leftClipRef}
-        className="absolute flex z-10  flex-col cursor-pointer items-center py-[2vw] gap-[12vw] top-0 left-0 w-1/2 h-full bg-[#E0FF98]"
+        className="absolute flex z-10  flex-col cursor-pointer items-center py-[2vw] gap-[15vw] top-0 left-0 w-1/2 h-full bg-[#E0FF98]"
         style={{
           clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
         }}
@@ -144,7 +144,7 @@ const QuoteContact = () => {
         </p>
 
         <div className="w-[22vw] space-y-[2vw]">
-          <p className="text-[3.2vw] text-center leading-[1.2] font-bold font-display">
+          <p className="text-[3.5vw] text-center leading-[1.2]  font-third">
             Have an event in mind ?
           </p>
           <p className="text-[1.3vw] font-medium text-center leading-[1.3]">
@@ -164,7 +164,7 @@ const QuoteContact = () => {
       {/* Right Clip Path */}
       <div
         ref={rightClipRef}
-        className="absolute flex z-10 flex-col cursor-pointer items-center gap-[12vw] py-[2vw] pl-[1.2vw] top-0 right-0 w-1/2 h-full bg-[#E0FF98] "
+        className="absolute flex z-10 flex-col cursor-pointer items-center gap-[15vw] py-[2vw] pl-[1.2vw] top-0 right-0 w-1/2 h-full bg-[#E0FF98] "
         style={{
           clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
         }}
@@ -173,9 +173,9 @@ const QuoteContact = () => {
           Your spotlights waiting
         </p>
 
-        <div className="w-[22vw] space-y-[2vw]">
-          <p className="text-[3.2vw] text-center leading-[1.2] font-bold font-display">
-            Got questions ? A wild idea ?
+        <div className="w-[25vw] space-y-[2vw]">
+          <p className="text-[3.5vw] text-center leading-[1.2] font-third ">
+            Got questions? A wild idea ?
           </p>
           <p className="text-[1.3vw] font-medium text-center leading-[1.3]">
             We'll get you started or help you dream bigger.
