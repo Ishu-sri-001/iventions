@@ -8,6 +8,7 @@ import CaseStudy from "@/components/home/CaseStudy";
 import Insights from "@/components/home/Insights";
 import QuoteContact from "@/components/home/QuoteContact";
 import Footer from "@/components/footer/Footer";
+import Stats from "@/components/home/Stats";
 
 export default function Home() {
   return (
@@ -17,8 +18,9 @@ export default function Home() {
       <About />
       <Categories />
       <CaseStudy />
+      {/* <Stats /> */}
       <Insights/>
-      {/* <QuoteContact /> */}
+      <QuoteContact />
       {/* <ProjectsDelievered /> */}
       <Footer />
 
