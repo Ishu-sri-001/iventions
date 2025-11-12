@@ -3,12 +3,24 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { gsap } from "gsap";
+import {useLenis} from 'lenis/react';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const lenis = useLenis();
+
+  useEffect(() => {
+    if (!lenis) return;
+
+    if (menuOpen || projectOpen) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+  }, [menuOpen, projectOpen]);
 
   const projectOverlayRef = useRef(null);
   const animationRef = useRef(null);
@@ -293,17 +305,19 @@ export default function Navbar() {
 
               {/* BLACK OVERLAY for MENU */}
       <div
-        className={`fixed inset-0 bg-black transition-opacity duration-700 ${
+        className={`fixed inset-0 bg-black  transition-opacity duration-700 ${
           menuOpen ? "opacity-60" : "opacity-0"
         } pointer-events-none z-[9998]`}
       ></div>
 
+      
       {/* BLACK OVERLAY for PROJECT (higher z-index) */}
-      <div
-        className={`fixed inset-0 bg-black transition-opacity duration-700 ${
-          projectOpen ? "opacity-60" : "opacity-0"
-        } pointer-events-none z-[10000]`}
-      ></div>
+<div
+  className={`fixed inset-0 bg-black transition-opacity duration-700 ${
+    projectOpen ? "opacity-60 pointer-events-auto" : "opacity-0 pointer-events-none"
+  } z-[10000]`}
+></div>
+
 
 
 

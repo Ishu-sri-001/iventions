@@ -8,6 +8,7 @@ import Btn from "../button/Btn";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
+
 const sliderData = [
   {
     id: 1,
@@ -106,69 +107,78 @@ export default function PageReveal() {
 
   // --- Smooth SplitText Animation ---
   const animateTextIn = () => {
-    const split = new SplitText(".quote-text", {
-      type: "lines",
-      linesClass: "line",
-      mask: "lines",
-    });
+  // create the SplitText instance for the .quote-text element(s)
+  const split = new SplitText(".quote-text", {
+    type: "lines",
+    linesClass: "line",
+    mask:'lines',
+    // remove mask option; let GSAP handle line setup
+  });
 
-    gsap.fromTo(
-      split.lines,
-      { yPercent: 100 },
-      {
-        yPercent: 0,
-        stagger: 0.05,
-        ease: "power2.inOut",
-        duration: 0.7,
-      }
-    );
-  };
+  // make sure only the newly created line elements start hidden and positioned
+  gsap.set(split.lines, { opacity: 0, yPercent: 100 });
 
-  const animateSlideChange = (direction) => {
-    if (isAnimating) return;
-    setIsAnimating(true);
+  // animate lines in
+  gsap.to(split.lines, {
+    yPercent: 0,
+    opacity: 1,
+    stagger: 0.05,
+    ease: "power2.inOut",
+    duration: 0.7,
+    onComplete: () => {
+      // cleanup split text DOM to avoid ghosts (optional)
+      // split.revert(); // don't revert if you want the lines kept for later exit animation
+    },
+  });
+};
 
-    // exit animation before content changes
-    const oldSplit = new SplitText(".quote-text", { 
-      type: "lines",
-      mask:'lines'
-    });
+ const animateSlideChange = (direction) => {
+  if (isAnimating) return;
+  setIsAnimating(true);
 
-    const tl = gsap.timeline({
-      onComplete: () => {
-        // instantly change content after exit animation
-        setCurrentSlide((prev) =>
+  // exit animation before content changes
+  const oldSplit = new SplitText(".quote-text", {
+    type: "lines",
+    mask: "lines",
+  });
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      
+      setCurrentSlide((prev) =>
           direction === "next"
             ? (prev + 1) % sliderData.length
             : (prev - 1 + sliderData.length) % sliderData.length
         );
-      },
-    });
+    },
+  });
 
-    tl.to(oldSplit.lines, {
-      yPercent: -100,
-      stagger: 0.04,
-      ease: "power2.inOut",
-      duration: 0.5,
-    });
+  tl.to(oldSplit.lines, {
+    yPercent: -100,
+    stagger: 0.04,
+    ease: "power2.inOut",
+    duration: 0.5,
+  });
+};
+
+
+ useEffect(() => {
+  // Animate new text in after React re-renders instantly
+  const ctx = gsap.context(() => {
+    animateTextIn();
+  });
+
+  // mark animation done after entry anim
+  const timeout = setTimeout(() => {
+    setIsAnimating(false);
+  }, 800);
+
+  return () => {
+    ctx.revert();
+    clearTimeout(timeout);
   };
+}, [currentSlide]);
 
-  useEffect(() => {
-    // Animate new text in after React re-renders instantly
-    const ctx = gsap.context(() => {
-      animateTextIn();
-    });
-
-    // mark animation done after entry anim
-    const timeout = setTimeout(() => {
-      setIsAnimating(false);
-    }, 800);
-
-    return () => {
-      ctx.revert();
-      clearTimeout(timeout);
-    };
-  }, [currentSlide]);
 
   const currentData = sliderData[currentSlide];
 
@@ -192,7 +202,8 @@ export default function PageReveal() {
               "polygon(100% 50%, 100% 49.75%, 100% 50%, 0% 50.3%, 100% 50%)",
           }}
         >
-          <div className="w-full h-full flex flex-col justify-between px-[5%] py-10">
+          <div className="w-full h-full flex flex-col justify-between px-[5%] py-10"
+          key={currentData.id}>
             {/* Stats */}
             <div className="grid grid-cols-4 gap-8 text-sm uppercase tracking-wide">
               {["Participants", "Industry", "Event Type", "Location"].map(
@@ -218,9 +229,9 @@ export default function PageReveal() {
               {/* Quote */}
               <div
                 key={currentData.id}
-                className="quote-text md:w-1/2 text-[1.5rem] leading-snug font-serif overflow-hidden"
+                className="md:w-1/2 text-[1.5rem] leading-snug font-serif overflow-hidden"
               >
-                "{currentData.quote}"
+                <div className="quote-text">"{currentData.quote}"</div>
               </div>
 
               {/* Author / Company */}

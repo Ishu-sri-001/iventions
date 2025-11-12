@@ -112,6 +112,7 @@ const Categories = () => {
           // transformOrigin: i % 2 === 0 ? "left center" : "right center",
           scale: 1,
           rotation: 0,
+          borderRadius: 0,
         });
       });
 
@@ -181,6 +182,7 @@ tl.to(
     rotation: rotateDir,
     // z: -400, // moves card backward along Z-axis
       rotateX: 20,
+      borderRadius:'3vw',
     // transformOrigin: "center center",
     ease: "linear",
   },
@@ -207,7 +209,7 @@ tl.to(
         <div
         key={category.id}
         ref={(el) => (cardsRef.current[i] = el)}
-        className="absolute inset-0"
+        className="absolute inset-0 overflow-hidden"
         >
           <SliderCard {...category} />
         </div>

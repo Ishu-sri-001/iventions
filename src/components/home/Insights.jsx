@@ -31,8 +31,8 @@ const Insights = () => {
     "Big stages, small details. Each one designed to leave a mark.",
     "Our clients love to come back, proof that true partnership lasts.",
     "One team. Twenty-one perspectives. Countless cultural insights.",
-    "We don’t just go global. We bring the world to every event.",
-    "That’s ideas, not coffee. Brilliant ones, brewed daily.",
+    "We don't just go global. We bring the world to every event.",
+    "That's ideas, not coffee. Brilliant ones, brewed daily.",
   ];
 
   const imageSources = [
@@ -43,117 +43,67 @@ const Insights = () => {
     "/assets/img/about-bg-5.jpeg",
   ];
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const total = heading.length;
+ useEffect(() => {
+  const ctx = gsap.context(() => {
+    const total = heading.length;
+    const midNosTopEls = gsap.utils.toArray(".mid-nos-top p");
+    const midNosEls = gsap.utils.toArray(".mid-nos p");
 
-      heading.forEach((_, i) => {
-        const startPos = (i / total) * 70;
-        const endPos = ((i + 1) / total) * 80;
+    // === Animate heading/content/midNosTop together ===
+    heading.forEach((_, i) => {
+      const startPos = (i / total) * 70;
+      const endPos = ((i + 1) / total) * 80;
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: "#insights",
-            start: `${startPos}% top`,
-            end: `${endPos}% top`,
-            scrub: true,
-            // markers: true,
-          },
-        });
-
-        // === FIRST ===
-        if (i === 0) {
-          tl.fromTo(
-            headingRefs.current[i],
-            { y: 0, opacity: 1 },
-            { y: 0, opacity: 1, duration: 1 }
-          )
-            .fromTo(
-              contentRefs.current[i],
-              { y: 0, opacity: 1 },
-              { y: 0, opacity: 1, duration: 1 },
-              "<"
-            )
-            .to(
-              [headingRefs.current[i], contentRefs.current[i]],
-              { y: -40, opacity: 0, ease: "power3.inOut", duration: 1 }
-            );
-        }
-
-        // === LAST ===
-        else if (i === total - 1) {
-          tl.fromTo(
-            headingRefs.current[i],
-            { y: 40, opacity: 0 },
-            { y: 0, opacity: 1, ease: "power3.out", duration: 1 }
-          ).fromTo(
-            contentRefs.current[i],
-            { y: 40, opacity: 0 },
-            { y: 0, opacity: 1, ease: "power3.out", duration: 1 },
-            "<"
-          );
-        }
-
-        // === MIDDLE ===
-        else {
-          tl.fromTo(
-            headingRefs.current[i],
-            { y: 60, opacity: 0 },
-            { y: 0, opacity: 1, ease: "power3.out", duration: 1 }
-          )
-            .fromTo(
-              contentRefs.current[i],
-              { y: 60, opacity: 0 },
-              { y: 0, opacity: 1, ease: "power3.out", duration: 1 },
-              "<"
-            )
-            .to(
-              [headingRefs.current[i], contentRefs.current[i]],
-              { y: -60, opacity: 0, ease: "power3.inOut", duration: 1 }
-            );
-        }
-      });
-
-      gsap.to(".mid-nos", {
-        yPercent: -62,
-        ease: "linear",
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: "#insights",
-          start: "top top",
-          end: "bottom bottom",
+          start: `${startPos}% top`,
+          end: `${endPos}% top`,
           scrub: true,
-          // markers: true,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            const total = imageSources.length;
-            const activeIndex = Math.floor(progress * (total - 0.0001));
-
-            imageRefs.current.forEach((img, i) => {
-              if (!img) return;
-              gsap.set(img, {
-                opacity: i === activeIndex ? 1 : 0,
-                duration: 0,
-              });
-            });
-          },
         },
       });
 
-      gsap.to(".mid-nos-top", {
-        yPercent: -62,
-        ease: "linear",
-        scrollTrigger: {
-          trigger: "#insights",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: true,
-          markers: false,
-        },
+      // Animate heading + content
+      tl.fromTo(headingRefs.current[i], { y: 60, opacity: 0 }, { y: 0, opacity: 1, ease: "power3.out", duration: 1 })
+        .fromTo(contentRefs.current[i], { y: 60, opacity: 0 }, { y: 0, opacity: 1, ease: "power3.out", duration: 1 }, "<");
+
+      // Animate both white and yellow numbers - translate entire container
+      const midNosContainer = document.querySelector(".mid-nos");
+      const midNosTopContainer = document.querySelector(".mid-nos-top");
+      
+      tl.to(midNosContainer, { y: `-${i * 16}vw`, ease: "power3.out", duration: 1 }, "<")
+        .to(midNosTopContainer, { y: `-${i * 16}vw`, ease: "power3.out", duration: 1 }, "<");
+
+      // Animate yellow number crossfade
+      midNosTopEls.forEach((el, j) => {
+        if (j === i) {
+          tl.to(el, { opacity: 1, duration: 0.6, ease: "power2.out" }, "<");
+        } else {
+          tl.to(el, { opacity: 0, duration: 0.6, ease: "power2.inOut" }, "<");
+        }
       });
+
+      // Fade out when scrolling away
+      tl.to([headingRefs.current[i], contentRefs.current[i]], { y: -60, opacity: 0, ease: "power3.inOut", duration: 1 });
     });
 
-    return () => ctx.revert();
-  }, []);
+    // === Global snap ===
+    ScrollTrigger.create({
+      trigger: "#insights",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+      snap: {
+        snapTo: (value) => Math.round(value * (total - 1)) / (total - 1),
+        duration: { min: 0.2, max: 0.4 },
+        ease: "power1.inOut",
+      },
+    });
+  });
+
+  return () => ctx.revert();
+}, []);
+
 
   const handleMouseMove = (e) => {
     const container = containerRef.current;
@@ -283,8 +233,8 @@ const Insights = () => {
       </div>
 
       {/* Yellow overlay numbers */}
-      <div className="h-[15vw] w-[30vw] overflow-hidden absolute z-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="h-[100vw] space-y-[1vw] mid-nos-top">
+      <div className="h-[15vw]  w-[30vw] overflow-hidden absolute z-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="h-fit space-y-[1vw] mid-nos-top">
           {mids.map((no, idx) => (
             <p
               key={idx}
