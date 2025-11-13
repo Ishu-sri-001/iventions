@@ -18,8 +18,8 @@ export default function Home() {
       <About />
       <Categories />
       <CaseStudy />
-      {/* <Stats /> */}
-      <Insights/>
+      <Stats />
+      {/* <Insights/> */}
       <QuoteContact />
       {/* <ProjectsDelievered /> */}
       <Footer />
