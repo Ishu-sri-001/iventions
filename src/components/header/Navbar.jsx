@@ -12,6 +12,8 @@ export default function Navbar() {
   const [hasAnimated, setHasAnimated] = useState(false);
   const lenis = useLenis();
 
+  
+
   useEffect(() => {
     if (!lenis) return;
 
@@ -24,6 +26,7 @@ export default function Navbar() {
 
   const projectOverlayRef = useRef(null);
   const animationRef = useRef(null);
+  const menuOverlayRef = useRef(null);
 
   const navItems = [
     { title: "About", href: "/about" },
@@ -36,12 +39,27 @@ export default function Navbar() {
     { title: "Contact", href: "/contact" },
   ];
 
-  const getClipPathFromPosition = (x, width) => {
-    const normalizedX = x / width;
-    const bottomLeftX = 2 + normalizedX * 90;
-    const leftY = 2 + normalizedX * 75;
-    return `polygon(100% 0%, 100% 6.7%, ${bottomLeftX}% 100%, 0% 100%, 0% ${leftY}%, 90% 0%)`;
-  };
+  // const getClipPathFromPosition = (x, width) => {
+  //   const normalizedX = x / width;
+  //   const bottomLeftX = 2 + normalizedX * 90;
+  //   const leftY = 2 + normalizedX * 75;
+  //   return `polygon(100% 0%, 100% 6.7%, ${bottomLeftX}% 100%, 0% 100%, 0% ${leftY}%, 90% 0%)`;
+  // };
+
+const getClipPathFromPosition = (x, width) => {
+  const normalizedX = x / width;
+  const easedX = 1 - Math.pow(1 - normalizedX, 2.2); // smooth near right
+
+  // Right side expands more
+  const bottomLeftX = 5 + easedX * 80;
+  const leftY = 5 + easedX * 50;
+
+  // NEW: Left side retracts as right expands
+  const leftX = easedX * 4; // tweak 4 → controls how much left side moves inward
+
+  return `polygon(100% 0%, 100% 6.7%, ${bottomLeftX}% 100%, ${leftX}% 100%, ${leftX}% ${leftY}%, 94% 0%)`;
+};
+
 
   const handleProjectHover = (e) => {
     if (!projectOpen || !projectOverlayRef.current) return;
@@ -66,15 +84,18 @@ export default function Navbar() {
     // Prepare for animation
     gsap.set(overlay, {
       clipPath:
-        "polygon(100% 0%, 100% 9.7%, 66.25% 100%, 0% 100%, 0% 75.25%, 92% 0%)",
+        "polygon(100% 0%, 100% 9.7%, 66.25% 100%, 0% 100%, 0% 75.25%, 94% 0%)",
         
         borderBottomLeftRadius: "5vw",
        transformOrigin: "top right",
     });
+    gsap.set('.projectt-overlay', {
+      transformOrigin: "top right",
+    })
 
     // Animate IN from top right
     gsap.fromTo(
-      overlay,
+      '.projectt-overlay',
       {
         scale: 0,
         opacity: 0,
@@ -88,7 +109,7 @@ export default function Navbar() {
     );
   } else {
     // Animate OUT in the same direction (toward top right)
-    gsap.to(overlay, {
+    gsap.to('.projectt-overlay', {
         scale: 0,
       opacity: 0,
       transformOrigin: "top right",
@@ -98,6 +119,30 @@ export default function Navbar() {
     });
   }
 }, [projectOpen]);
+
+  useEffect(() => {
+    const overlay = menuOverlayRef.current;
+    if (!overlay) return;
+
+    // gsap.set(overlay, {
+    //   transformOrigin: "top left",
+    //   scale: 0,
+    // });
+
+    if (menuOpen) {
+      gsap.to(overlay, {
+        scale: 1,
+        duration: 0.8,
+        ease: "power3.inOut",
+      });
+    } else {
+      gsap.to(overlay, {
+        scale: 0,
+        duration: 0.8,
+        ease: "power3.inOut",
+      });
+    }
+  }, [menuOpen]);
 
 
   const handleMenuHover = () => {
@@ -156,7 +201,7 @@ export default function Navbar() {
       {/* Right - Got a Project */}
       <button
         onClick={() => setProjectOpen(!projectOpen)}
-        className="relative flex items-center justify-center z-[10002] gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group w-[13vw]"
+        className="relative flex items-center justify-center z-[10002] gap-[1.2vw] cursor-pointer outline-none bg-yellow px-[1.5vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group w-[13vw]"
       >
         <div
           className={`flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative transition-all duration-500`}
@@ -201,16 +246,19 @@ export default function Navbar() {
       
 
       {/* MENU OVERLAY */}
+
       <div
-        className={`fixed top-0 left-0 z-9999 w-[105vw] h-screen navbar-clip-path transition-all duration-700 ${
+        ref={menuOverlayRef}
+        className="fixed top-0 left-0 z-[9999] w-[127vw] h-[125vh] rounded-br-full overflow-hidden "
+        style={{ transformOrigin: "top left", scale: 0 }}
+      > <div
+        className={` w-full h-full navbar-clip-path transition-all duration-700 ${
           menuOpen ? "pointer-events-auto" : "pointer-events-none"
         } origin-top-left`}
-        style={{
-          transform: menuOpen ? "scale(1)" : "scale(0)",
-        }}
+        
       >
         <div
-          className={`flex flex-col items-end justify-end origin-left mr-[7.5vw] pb-[2.5vw] h-full text-center space-y-6 transition-opacity duration-700 ${
+          className={`flex flex-col items-end justify-end origin-left mr-[28vw] pb-[15vw] h-full text-center space-y-6  ${
             menuOpen ? "opacity-100 delay-500" : "opacity-0"
           }`}
         >
@@ -237,22 +285,29 @@ export default function Navbar() {
           </ul>
         </div>
       </div>
+      </div>
 
       {/* PROJECT OVERLAY */}
-      <div
-        ref={projectOverlayRef}
-        className={`fixed top-[-5%] z-10001 left-[-5%] w-[105vw] h-[120vh] bg-yellow ${
-          projectOpen ? "pointer-events-auto" : "pointer-events-none"
-        }`}
-        onMouseMove={handleProjectHover}
-        style={{
+      <div className="fixed  top-[-5%] projectt-overlay z-10001  left-[-30%] w-[130vw] h-[135vh] rounded-bl-full overflow-hidden"
+          style={{
           transformOrigin: "top right",
           transform: projectOpen ? "scale(1)" : "scale(0)",
           
+          
         }}
       >
+
+      <div
+        ref={projectOverlayRef}
+        className={` bg-yellow w-full h-full ${
+          projectOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+        onMouseMove={handleProjectHover}
+        
+        >
+       
         <div className="h-full w-full px-[2vw] flex ">
-          <div className="w-[50%] flex flex-col items-center justify-center">
+          <div className="w-[55%] flex flex-col items-end justify-center">
             <div className="w-[40%] cursor-pointer">
               <p className="text-[1.8vw]  leading-[1.2]]  font-display pb-[2vw]">
                 Get a Quote
@@ -277,7 +332,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="w-[50%] flex flex-col items-center justify-center">
+          <div className="w-[45%] flex flex-col items-end justify-center">
             <div className="w-[70%] cursor-pointer">
               <p className="text-[1.8vw] leading-none  font-display pb-[2vw]">
                 Contact
@@ -301,6 +356,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
+         </div>
       </div>
 
               {/* BLACK OVERLAY for MENU */}
