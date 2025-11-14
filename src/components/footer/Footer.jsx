@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import Image from 'next/image';
 import Link from 'next/link';
+import ScrollTrigger from 'gsap/dist/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger)
 
 const Footer = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -28,6 +30,27 @@ const Footer = () => {
     { title: "LinkedIn", href: "https://linkedin.com" },
     { title: "Instagram", href: "https://instagram.com" },
   ];
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+        gsap.fromTo('#footer-wrapper', {
+          yPercent:-50,
+        }, {
+          yPercent:0,
+          ease:'none',
+          scrollTrigger: {
+            trigger:'#footer-wrapper',
+             start: 'top bottom',
+          end:'bottom 50%',
+          scrub: true,
+          // markers:true,
+          }
+
+        })
+    })
+    ScrollTrigger.refresh();
+    return () => ctx.revert();
+  })
 
   useEffect(() => {
     if (typeof window !== 'undefined' && containerRef.current) {
@@ -65,11 +88,14 @@ const Footer = () => {
   };
 
   return (
+    <div className='h-fit translate-y-[-50%] w-full relative z-5' id='footer-wrapper'>
     <footer 
       ref={containerRef}
-      className='w-full h-screen bg-[#1E1E1E] flex flex-col items-stretch justify-between p-[2vw]'
+      className='w-full h-screen mt-0 sticky top-0 bg-[#1E1E1E] flex flex-col items-stretch justify-between p-[2vw]'
       onMouseMove={handleMouseMove}
     >
+      
+
       {/* TOP SECTION */}
       <div className="w-full h-[60%] bg-[#1E1E1E] flex justify-between items-start text-white">
         <div className="flex flex-col justify-between h-full">
@@ -202,7 +228,10 @@ const Footer = () => {
           </g>
         </svg>
       </div>
+   
+
     </footer>
+      </div>
   );
 };
 

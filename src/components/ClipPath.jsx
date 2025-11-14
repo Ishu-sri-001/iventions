@@ -19,12 +19,12 @@ const ClipPath = ({ clipRef }) => {
       .to('.bottom-clip', {
         clipPath: 'polygon(50% 2.45%, 100% 38.41%, 100% 100%, 0% 100%, 0% 40.5%)',
         duration:0.7,
-        ease:'power1.out',
-      })
+        ease:'power2.out',
+      },'-=0.2')
       .to('.clip-container', {
         rotateZ: 0,
         duration:0.7,
-        ease:'power2.out'
+        ease:'power2.inOut'
       })
     })
     return () => ctx.revert()

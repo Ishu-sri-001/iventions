@@ -3,6 +3,8 @@ import Image from "next/image";
 import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import IconButton from "../button/IconButton";
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger)
 
 const QuoteContact = () => {
   const leftClipRef = useRef(null);
@@ -99,12 +101,37 @@ const QuoteContact = () => {
     };
   }, [activeIndex]);
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+        gsap.fromTo('#quote-wrap', {
+          yPercent:-50,
+        }, {
+          yPercent:0,
+          ease:'none',
+          scrollTrigger: {
+            trigger:'#quote-wrap',
+             start: 'top bottom',
+          end:'bottom 50%',
+          scrub: true,
+          // markers:true
+          }
+
+        })
+    })
+    ScrollTrigger.refresh();
+    return () => ctx.revert();
+  })
+
   return (
+
+    <div className="h-fit translate-y-[-50%] w-full relative z-50" id="quote-wrap">
+
+    
     <section
       ref={containerRef}
-      className="w-full h-screen relative overflow-hidden bg-black"
+      className="w-full h-screen sticky top-0  overflow-hidden bg-black"
     >
-      {/* ✅ Image Layer Stack */}
+      {/* Image Layer Stack */}
       <div className="absolute inset-0">
         {images.map((src, i) => (
           <Image
@@ -200,6 +227,7 @@ const QuoteContact = () => {
         className="absolute top-0 right-[10%] w-[28%] h-full z-10"
       ></div>
     </section>
+    </div>
   );
 };
 

@@ -190,7 +190,7 @@ const Hero = () => {
   <Image
     width={1000}
     height={1000}
-    src="/assets/svg/home-hero.svg"
+    src="/assets/svg/home-hero.svg"c
     alt="text-svg"
     className="absolute bottom-5 left-0 w-full h-full object-contain mix-blend-color-burn opacity-90 z-10"
   />

@@ -4,7 +4,6 @@ import About from "@/components/home/About";
 import Navbar from "@/components/header/Navbar";
 import Categories from "@/components/home/Categories";
 import ProjectsDelievered from "@/components/home/ProjectsDelievered";
-import CaseStudy from "@/components/home/CaseStudy";
 import Insights from "@/components/home/Insights";
 import QuoteContact from "@/components/home/QuoteContact";
 import Footer from "@/components/footer/Footer";
@@ -16,7 +15,7 @@ export default function Home() {
     <>
     <Navbar />
       <Hero />
-      <About />
+      {/* <About /> */}
       <Categories />
       <CaseStudy2 />
       <Stats />

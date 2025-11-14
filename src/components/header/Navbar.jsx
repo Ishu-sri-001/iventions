@@ -12,20 +12,6 @@ export default function Navbar() {
   const [hasAnimated, setHasAnimated] = useState(false);
   const lenis = useLenis();
 
-  useEffect(() => {
-    const ctx=gsap.context(() => {
-        gsap.fromTo('#navv', {
-          opacity:0,
-        } , {
-
-          opacity:1,
-          duration:0.5,
-          delay:0.4,
-          ease:'power2.out'
-        })
-    })
-    return () => ctx.revert();
-  })
 
   useEffect(() => {
     if (!lenis) return;
@@ -170,7 +156,7 @@ const getClipPathFromPosition = (x, width) => {
 
     <div >
 
-      <div className="w-full flex justify-center fixed top-0 z-10 pt-[1vw] h-[2vw] mix-blend-exclusion invert">
+      <div className="w-full flex  justify-center fixed top-0 z-10 pt-[1vw] h-[2vw] mix-blend-exclusion invert">
          <Image
           src="/assets/svg/icon-logo.svg"
           alt="logo"
@@ -178,13 +164,10 @@ const getClipPathFromPosition = (x, width) => {
           height={500}
           className="object-contain "
         />
-        <div>
-
-        </div>
-
+        
       </div>
 
-    <nav id="navv" className="fixed opacity-0 top-0 left-0 right-0 w-full h-[3vw] flex items-start justify-between z-50">
+    <nav id="navv" className="fixed top-0 left-0 right-0 w-full h-[3vw] flex items-start justify-between z-9999">
       {/* Left - Menu */}
       <button
         onClick={() => setMenuOpen(!menuOpen)}

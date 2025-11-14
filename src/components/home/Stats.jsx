@@ -241,7 +241,7 @@ const Insights = () => {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="w-screen h-[190vh] bg-[#F3EFEB] relative z-0"
+      className="w-screen h-[190vh] bg-[#F3EFEB] relative z-55"
     >
       <div className="h-screen w-full overflow-hidden sticky top-0 flex items-center justify-between px-[5vw] z-2">
 
