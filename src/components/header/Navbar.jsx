@@ -276,6 +276,7 @@ const getClipPathFromPosition = (x, width) => {
 
       {/* Right - Got a Project */}
       <button
+        disabled={menuOpen}
       onMouseEnter={handleProjectEnter}
       onMouseLeave={LeaveProjectHover}
 onClick={() => {
