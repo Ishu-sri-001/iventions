@@ -288,6 +288,7 @@ export default function ClippedTextSection() {
                 animation: "expandSingleV 1s linear forwards",
               }}
             />
+            <div className="absolute inset-0 bg-cover bg-black/20" />
           </div>
         )}
 

@@ -24,6 +24,10 @@ const Hero = () => {
           mask: "lines",
         });
 
+        gsap.set('.ivention-overlay', {
+          opacity:0,
+        })
+
         tl.from(splitHero.lines, {
           yPercent: 100,
           opacity: 0,
@@ -50,44 +54,6 @@ const Hero = () => {
         }
       });
 
-      // gsap.set(".hero-clip-path", {
-      //   scale: 0,
-      //   rotateZ: -180,
-      //   clipPath:
-      //     "polygon(59.15% 0%, 53.34% 51.47%, 15.75% 100%, 15.75% 100%, 45.32% 100%, 53.74% 51.47%, 86.1% 0%)",
-      //   transformOrigin: "center center",
-      // });
-
-     
-
-        // .fromTo(
-        //   ".hero-clip-path",
-        //   {
-        //     scale: 0,
-        //   },
-        //   {
-        //     scale: 1,
-        //     ease: "linear",
-        //     duration: 0.5,
-        //   }
-        // )
-
-        // .to(
-        //   ".hero-clip-path",
-        //   {
-        //     delay: 0.5,
-        //     rotateZ: 0,
-        //     ease: "power1.out",
-        //     duration: 0.5,
-        //   }
-        // )
-
-        // .to(".hero-clip-path", {
-        //   duration: 0.7,
-        //   ease: "linear",
-        //   clipPath:
-        //     "polygon(59.15% 0%, 53.34% 51.47%, 0% 27.43%, 0% 100%, 62.32% 100%, 55.68% 55.08%, 90.6% 0%)",
-        // })
         
         tl.to(videoRef.current, {
           opacity: 1,
@@ -122,8 +88,8 @@ const Hero = () => {
     const videoRotateX = baseRotateX - normY * 10;
 
     // Clip tilts opposite to mouse movement (anti-direction)
-    const clipRotateY = baseRotateY - normX * 6;
-    const clipRotateX = baseRotateX + normY * 6;
+    const clipRotateY = baseRotateY - normX * 15;
+    const clipRotateX = baseRotateX + normY * 15;
 
     gsap.to(video, {
       rotateX: videoRotateX,
@@ -137,7 +103,6 @@ const Hero = () => {
     gsap.to(clip, {
       rotateX: clipRotateX,
       rotateY: clipRotateY,
-      // scale: 1.02,
       duration: 0.3,
       ease: "power2.out",
       overwrite: "auto",
@@ -179,6 +144,9 @@ const Hero = () => {
       onMouseLeave={handleMouseLeave}
       className="w-screen h-[140vh] relative  "
     >
+      <div className="fixed inset-0 bg-[#F3EFEB] h-full w-full ivention-overlay z-10">
+
+      </div>
 
       <div className="h-screen w-full sticky top-0 overflow-hidden flex justify-center items-center">
 

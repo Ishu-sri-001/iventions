@@ -13,7 +13,7 @@ const ClipPath = ({ clipRef }) => {
       const tl = gsap.timeline()
       tl.to('.clip-container', {
         scale: 1,
-        duration: 0.7,
+        duration: 0.75,
         ease:'power2.in'
       })
       .to('.bottom-clip', {

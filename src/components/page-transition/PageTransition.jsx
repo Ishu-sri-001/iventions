@@ -75,9 +75,9 @@ export default function PageTransition({ children }) {
 
     const overlay = overlayRef.current;
 
-    gsap.to(overlay, {
+    // Reset clip-path and opacity to initial state before starting animation
+    gsap.set(overlay, {
       autoAlpha: 1,
-      transformOrigin: "0% 0%",
       clipPath:
         "polygon(0% 0%, 7.5% 0%, 100% 51.5%, 100% 100%, 76.75% 100%, 0% 7%)",
     });

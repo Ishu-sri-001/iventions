@@ -12,7 +12,20 @@ export default function Navbar() {
   const [hasAnimated, setHasAnimated] = useState(false);
   const lenis = useLenis();
 
-  
+  useEffect(() => {
+    const ctx=gsap.context(() => {
+        gsap.fromTo('#navv', {
+          opacity:0,
+        } , {
+
+          opacity:1,
+          duration:0.5,
+          delay:0.4,
+          ease:'power2.out'
+        })
+    })
+    return () => ctx.revert();
+  })
 
   useEffect(() => {
     if (!lenis) return;
@@ -78,6 +91,7 @@ const getClipPathFromPosition = (x, width) => {
 
   useEffect(() => {
   const overlay = projectOverlayRef.current;
+  
   if (!overlay) return;
 
   if (projectOpen) {
@@ -153,7 +167,24 @@ const getClipPathFromPosition = (x, width) => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 w-full h-[3vw] flex items-start justify-between z-50">
+
+    <div >
+
+      <div className="w-full flex justify-center fixed top-0 z-10 pt-[1vw] h-[2vw] mix-blend-exclusion invert">
+         <Image
+          src="/assets/svg/icon-logo.svg"
+          alt="logo"
+          width={500}
+          height={500}
+          className="object-contain "
+        />
+        <div>
+
+        </div>
+
+      </div>
+
+    <nav id="navv" className="fixed opacity-0 top-0 left-0 right-0 w-full h-[3vw] flex items-start justify-between z-50">
       {/* Left - Menu */}
       <button
         onClick={() => setMenuOpen(!menuOpen)}
@@ -188,15 +219,15 @@ const getClipPathFromPosition = (x, width) => {
       </button>
 
       {/* Center - Logo */}
-      <div className="flex w-[7%] justify-center items-center my-auto">
+      {/* <div className="flex w-[7%] justify-center items-center my-auto">
         <Image
           src="/assets/svg/icon-logo.svg"
           alt="logo"
           width={500}
           height={500}
-          className="object-contain brightness-0"
+          className="object-contain "
         />
-      </div>
+      </div> */}
 
       {/* Right - Got a Project */}
       <button
@@ -378,5 +409,7 @@ const getClipPathFromPosition = (x, width) => {
 
 
     </nav>
+        </div>
+
   );
 }
