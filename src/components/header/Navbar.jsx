@@ -12,6 +12,22 @@ export default function Navbar() {
   const [hasAnimated, setHasAnimated] = useState(false);
   const lenis = useLenis();
 
+  useEffect(() => {
+    const ctx= gsap.context(() => {
+      gsap.fromTo('.nav-menu-item', {
+          opacity:0,
+      },
+      {
+        opacity:1,
+        stagger:0.05,
+        duration:0.3,
+        ease:'power2.out',
+        delay:0.5,
+      })
+    })
+    return () => ctx.revert();
+  },[])
+
 
   useEffect(() => {
     if (!lenis) return;
@@ -150,13 +166,51 @@ const getClipPathFromPosition = (x, width) => {
       setHasAnimated(true);
       setTimeout(() => setHasAnimated(false), 500);
     }
+    gsap.fromTo('.menu-below-text', {
+      y:'2vw',
+      opacity:0,
+    }, {
+      y:'0vw',
+      opacity:1,
+      duration:0.3,
+    })
+    gsap.to('.menu-top-text', {
+      y:'-2vw',
+      duration:0.3,
+    })
   };
+
+  const leaveNav = () => {
+      gsap.to('.menu-top-text', { y: '0vw', duration: 0, ease: "linear" });
+      gsap.to('.menu-below-text', { y: '2vw', duration: 0, ease: "linear" });
+    };
+
+    const handleProjectEnter = () => {
+    
+    gsap.fromTo('.project-below-text', {
+      y:'2vw',
+      opacity:0,
+    }, {
+      y:'0vw',
+      opacity:1,
+      duration:0.3,
+    })
+    gsap.to('.project-top-text', {
+      y:'-2vw',
+      duration:0.3,
+    })
+  };
+
+  const LeaveProjectHover = () => {
+      gsap.to('.project-top-text', { y: '0vw', duration: 0, ease: "linear" });
+      gsap.to('.project-below-text', { y: '2vw', duration: 0, ease: "linear" });
+    };
 
   return (
 
-    <div >
+    <div id='navbar-over' className="space-y-0" >
 
-      <div className="w-full flex  justify-center fixed top-0 z-9999 pt-[1vw] h-[2vw] mix-blend-exclusion invert">
+      <div className="w-full flex opacity-0 nav-menu-item justify-center fixed top-0 z-9999 pt-[1vw] h-[2vw] mix-blend-exclusion invert">
          <Image
           src="/assets/svg/icon-logo.svg"
           alt="logo"
@@ -170,9 +224,13 @@ const getClipPathFromPosition = (x, width) => {
     <nav id="navv" className="fixed top-0 left-0 right-0 w-full h-[3vw] flex items-start justify-between z-9999">
       {/* Left - Menu */}
       <button
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => {
+    if (projectOpen) setProjectOpen(false); 
+    setMenuOpen(!menuOpen);
+  }}
         onMouseEnter={handleMenuHover}
-        className="flex items-center group gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw] transition-all z-10000"
+        onMouseLeave={leaveNav}
+        className="flex opacity-0 overflow-hidden nav-menu-item items-center group gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw] transition-all z-10000 relative"
       >
         <div className="flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative group cursor-pointer">
           <span
@@ -196,8 +254,12 @@ const getClipPathFromPosition = (x, width) => {
           ></span>
         </div>
 
-        <span className="text-[0.7vw] font-body font-semibold">
+        <span className="text-[0.7vw] menu-top-text font-body font-semibold">
           {menuOpen ? "CLOSE" : "MENU"}
+        </span>
+
+        <span className="text-[0.7vw] menu-below-text absolute translate-y-100 font-semibold font-body right-[22.5%]">
+            {menuOpen ? "CLOSE" : "MENU"}
         </span>
       </button>
 
@@ -214,8 +276,13 @@ const getClipPathFromPosition = (x, width) => {
 
       {/* Right - Got a Project */}
       <button
-        onClick={() => setProjectOpen(!projectOpen)}
-        className={`relative flex items-center overflow-hidden justify-center z-[10002] cursor-pointer outline-none bg-yellow px-[1vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group `}
+      onMouseEnter={handleProjectEnter}
+      onMouseLeave={LeaveProjectHover}
+onClick={() => {
+    if (menuOpen) setMenuOpen(false); 
+    setProjectOpen(!projectOpen);
+  }}
+          className={`relative nav-menu-item opacity-0 flex items-center overflow-hidden justify-center z-[10002] cursor-pointer outline-none bg-yellow px-[1vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group `}
       >
         
         <div className="relative w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
@@ -241,25 +308,7 @@ const getClipPathFromPosition = (x, width) => {
           <span className="w-[0.5vw] h-[1px] bg-black rotate-90 absolute"/>
         </div>
 
-        {/* <div
-          className={`flex flex-col w-[0.4vw] justify-start gap-[0.2vw] relative transition-all duration-500 `}
-        >
-          <span
-            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
-              projectOpen
-                ? "rotate-45 translate-y-[0.2vw] opacity-100"
-                : "rotate-0 translate-y-0 opacity-0"
-            }`}
-          ></span>
-
-          <span
-            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
-              projectOpen
-                ? "-rotate-45 translate-y-[0.1vw] opacity-100"
-                : "rotate-0 translate-y-2 opacity-0"
-            }`}
-          ></span>
-        </div> */}
+       
       </button>
       
 

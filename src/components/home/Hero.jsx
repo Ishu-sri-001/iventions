@@ -144,7 +144,7 @@ const Hero = () => {
       onMouseLeave={handleMouseLeave}
       className="w-screen h-[140vh] relative  "
     >
-      <div className="fixed inset-0 bg-[#F3EFEB] pointer-events-none h-full w-full ivention-overlay z-10">
+      <div className="fixed inset-0 bg-[#F3EFEB] pointer-events-none h-full w-full ivention-overlay z-[99999]">
 
       </div>
 
@@ -190,7 +190,7 @@ const Hero = () => {
   <Image
     width={1000}
     height={1000}
-    src="/assets/svg/home-hero.svg"c
+    src="/assets/svg/home-hero.svg"
     alt="text-svg"
     className="absolute bottom-5 left-0 w-full h-full object-contain mix-blend-color-burn opacity-90 z-10"
   />
