@@ -184,7 +184,7 @@ const getClipPathFromPosition = (x, width) => {
                 : "rotate-0 translate-y-0"
             }`}
           ></span>
-
+          
           <span
             className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 delay-100 ${
               hasAnimated ? "scale-x-0" : "scale-x-100"
