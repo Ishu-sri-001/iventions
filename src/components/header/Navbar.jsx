@@ -308,8 +308,8 @@ onClick={() => {
             </div>
            <div className="absolute project-below-text w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
           <span
-            className={`absolute transition-all duration-300 ease-in-out font-body text-[0.7vw] font-semibold ${
-              projectOpen ? "opacity-0 translate-y-[-100%]" : "translate-y-0 opacity-100"
+            className={`absolute transition-all duration-300 ease-in-out opacity-100 font-body text-[0.7vw] font-semibold ${
+              projectOpen ? " translate-y-[-100%]" : "translate-y-0 opacity-100"
             }`}
           >
             GOT A PROJECT?

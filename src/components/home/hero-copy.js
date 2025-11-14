@@ -199,7 +199,7 @@ const Hero = () => {
 
       {/* TEXT LAYER */}
       <div className="absolute inset-0 h-full w-full flex items-center text-[#101417] justify-between z-20 px-[3vw]">
-        <p className="text-[2.5vw] font-third leading-none">
+        <p className="text-[2.5vw] font-third leading-[1.2]">
           Step into <br /> the Spotlight
         </p>
         <p className="w-[23%] text-[1.3vw] leading-normal">
