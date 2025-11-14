@@ -56,7 +56,7 @@ const getClipPathFromPosition = (x, width) => {
   // NEW: Left side retracts as right expands
   const leftX = easedX * 4; // tweak 4 → controls how much left side moves inward
 
-  return `polygon(100% 0%, 100% 9.7%, ${bottomLeftX}% 100%, ${leftX}% 100%, ${leftX}% ${leftY}%, 94% 0%)`;
+  return `polygon(100% 0%, 100% 9.7%, ${bottomLeftX}% 100%, ${leftX}% 100%, ${leftX}% ${leftY}%, 98% 0%)`;
 };
 
 
@@ -84,7 +84,7 @@ const getClipPathFromPosition = (x, width) => {
     // Prepare for animation
     gsap.set(overlay, {
       clipPath:
-        "polygon(100% 0%, 100% 9.7%, 66.25% 100%, 0% 100%, 0% 75.25%, 94% 0%)",
+        "polygon(100% 0%, 100% 9.7%, 66.25% 100%, 0% 100%, 0% 75.25%, 98% 0%)",
         
         borderBottomLeftRadius: "5vw",
        transformOrigin: "top right",
@@ -190,7 +190,7 @@ const getClipPathFromPosition = (x, width) => {
               hasAnimated ? "scale-x-0" : "scale-x-100"
             } ${
               menuOpen
-                ? "-rotate-45 translate-y-0.5"
+                ? "-rotate-45 translate-y-[0.2vw]"
                 : "rotate-0 translate-y-0"
             }`}
           ></span>
@@ -215,36 +215,39 @@ const getClipPathFromPosition = (x, width) => {
       {/* Right - Got a Project */}
       <button
         onClick={() => setProjectOpen(!projectOpen)}
-        className={`relative flex items-center overflow-hidden justify-center z-[10002] gap-[1vw] cursor-pointer outline-none bg-yellow px-[1.5vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group w-[13vw]  ${projectOpen ? "w-[13vw] " : "w-[4vw]"}`}
+        className={`relative flex items-center overflow-hidden justify-center z-[10002] cursor-pointer outline-none bg-yellow px-[1vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group `}
       >
         
-
         <div className="relative w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
           <span
-            className={`absolute transition-all duration-500 font-body text-[0.7vw] font-semibold ${
-              projectOpen ? "opacity-0" : "translate-y-0 opacity-100"
+            className={`absolute transition-all duration-300 ease-in-out font-body text-[0.7vw] font-semibold ${
+              projectOpen ? "opacity-0 translate-y-[-100%]" : "translate-y-0 opacity-100"
             }`}
           >
             GOT A PROJECT?
           </span>
           <span
-            className={`absolute transition-all duration-500 font-body text-[0.7vw] font-semibold ${
+            className={`absolute transition-all duration-300 ease-in-out font-body text-[0.7vw] font-semibold ${
               projectOpen
-                ? "translate-y-0 opacity-100"
-                : "translate-y-[0.5vw] opacity-0"
+                ? "translate-y-0 opacity-100 delay-200"
+                : "translate-y-full opacity-0"
             }`}
           >
             CLOSE
           </span>
         </div>
+        <div className={`w-fit flex justify-center items-center absolute duration-300 ease-in-out right-[20%] ${projectOpen?"rotate-[135deg] opacity-100":"opacity-0 rotate-45 delay-200"}`}>
+          <span className="w-[0.5vw] h-[1px] bg-black"/>
+          <span className="w-[0.5vw] h-[1px] bg-black rotate-90 absolute"/>
+        </div>
 
-        <div
-          className={`flex flex-col  justify-start gap-[0.2vw] relative transition-all duration-500 ${projectOpen ? "w-[1.4vw] gap-[0.2vw]" : "w-0 gap-0"}`}
+        {/* <div
+          className={`flex flex-col w-[0.4vw] justify-start gap-[0.2vw] relative transition-all duration-500 `}
         >
           <span
             className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
               projectOpen
-                ? "rotate-45 translate-y-[-0.5vw] opacity-100"
+                ? "rotate-45 translate-y-[0.2vw] opacity-100"
                 : "rotate-0 translate-y-0 opacity-0"
             }`}
           ></span>
@@ -253,12 +256,11 @@ const getClipPathFromPosition = (x, width) => {
             className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
               projectOpen
                 ? "-rotate-45 translate-y-[0.1vw] opacity-100"
-                : "rotate-0 translate-y-0 opacity-0"
+                : "rotate-0 translate-y-2 opacity-0"
             }`}
           ></span>
-        </div>
+        </div> */}
       </button>
-
       
 
       {/* MENU OVERLAY */}
@@ -274,7 +276,7 @@ const getClipPathFromPosition = (x, width) => {
         
       >
         <div
-          className={`flex flex-col items-end justify-end origin-left mr-[29vw] pb-[14vw] h-full text-center space-y-6  ${
+          className={`flex flex-col items-end justify-end origin-left mr-[29vw] pb-[15vw] h-full text-center space-y-6  ${
             menuOpen ? "opacity-100 delay-700" : "opacity-0"
           }`}
         >
@@ -308,8 +310,6 @@ const getClipPathFromPosition = (x, width) => {
           style={{
           transformOrigin: "top right",
           transform: projectOpen ? "scale(1)" : "scale(0)",
-          
-          
         }}
       >
 
