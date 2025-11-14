@@ -56,7 +56,7 @@ const getClipPathFromPosition = (x, width) => {
   // NEW: Left side retracts as right expands
   const leftX = easedX * 4; // tweak 4 → controls how much left side moves inward
 
-  return `polygon(100% 0%, 100% 6.7%, ${bottomLeftX}% 100%, ${leftX}% 100%, ${leftX}% ${leftY}%, 94% 0%)`;
+  return `polygon(100% 0%, 100% 9.7%, ${bottomLeftX}% 100%, ${leftX}% 100%, ${leftX}% ${leftY}%, 94% 0%)`;
 };
 
 
@@ -215,27 +215,9 @@ const getClipPathFromPosition = (x, width) => {
       {/* Right - Got a Project */}
       <button
         onClick={() => setProjectOpen(!projectOpen)}
-        className="relative flex items-center justify-center z-[10002] gap-[1.2vw] cursor-pointer outline-none bg-yellow px-[1.5vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group w-[13vw]"
+        className={`relative flex items-center overflow-hidden justify-center z-[10002] gap-[1vw] cursor-pointer outline-none bg-yellow px-[1.5vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group w-[13vw]  ${projectOpen ? "w-[13vw] " : "w-[4vw]"}`}
       >
-        <div
-          className={`flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative transition-all duration-500`}
-        >
-          <span
-            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
-              projectOpen
-                ? "rotate-45 translate-y-[-0.5vw] opacity-100"
-                : "rotate-0 translate-y-0 opacity-0"
-            }`}
-          ></span>
-
-          <span
-            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
-              projectOpen
-                ? "-rotate-45 translate-y-[0.1vw] opacity-100"
-                : "rotate-0 translate-y-0 opacity-0"
-            }`}
-          ></span>
-        </div>
+        
 
         <div className="relative w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
           <span
@@ -255,6 +237,26 @@ const getClipPathFromPosition = (x, width) => {
             CLOSE
           </span>
         </div>
+
+        <div
+          className={`flex flex-col  justify-start gap-[0.2vw] relative transition-all duration-500 ${projectOpen ? "w-[1.4vw] gap-[0.2vw]" : "w-0 gap-0"}`}
+        >
+          <span
+            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
+              projectOpen
+                ? "rotate-45 translate-y-[-0.5vw] opacity-100"
+                : "rotate-0 translate-y-0 opacity-0"
+            }`}
+          ></span>
+
+          <span
+            className={`block h-px w-full bg-black transform origin-left ease-in-out transition-all duration-500 ${
+              projectOpen
+                ? "-rotate-45 translate-y-[0.1vw] opacity-100"
+                : "rotate-0 translate-y-0 opacity-0"
+            }`}
+          ></span>
+        </div>
       </button>
 
       
@@ -273,7 +275,7 @@ const getClipPathFromPosition = (x, width) => {
       >
         <div
           className={`flex flex-col items-end justify-end origin-left mr-[29vw] pb-[14vw] h-full text-center space-y-6  ${
-            menuOpen ? "opacity-100 delay-500" : "opacity-0"
+            menuOpen ? "opacity-100 delay-700" : "opacity-0"
           }`}
         >
           <ul className="font-medium">
