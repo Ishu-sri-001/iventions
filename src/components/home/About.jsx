@@ -344,7 +344,7 @@ export default function ClippedTextSection() {
         {/* Clickable overlay for screen halves */}
         {isSliderActive && (
           <div
-            className="absolute inset-0 "
+            className="absolute inset-0 cursor-none"
             onClick={handleScreenClick}
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsMouseInSlider(true)}

@@ -17,11 +17,11 @@ export default function Home() {
     <Navbar />
       <Hero />
       <About />
-      {/* <Categories /> */}
+      <Categories />
       <CaseStudy2 />
       <Stats />
       <QuoteContact />
-      <ProjectsDelievered />
+      {/* <ProjectsDelievered /> */}
       <Footer />
 
     </>
