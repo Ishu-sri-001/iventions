@@ -286,6 +286,26 @@ onClick={() => {
       >
         
         <div className="relative w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
+          <div className="absolute project-top-text w-full h-full flex items-center justify-center overflow-hidden">
+
+          <span
+            className={`absolute transition-all duration-300 ease-in-out font-body text-[0.7vw] font-semibold ${
+              projectOpen ? "opacity-0 translate-y-[-100%]" : "translate-y-0 opacity-100"
+            }`}
+            >
+            GOT A PROJECT?
+          </span>
+          <span
+            className={`absolute transition-all duration-300 ease-in-out font-body text-[0.7vw] font-semibold ${
+              projectOpen
+              ? "translate-y-0 opacity-100 delay-200"
+              : "translate-y-full opacity-0"
+            }`}
+            >
+            CLOSE
+          </span>
+            </div>
+           <div className="absolute project-below-text w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
           <span
             className={`absolute transition-all duration-300 ease-in-out font-body text-[0.7vw] font-semibold ${
               projectOpen ? "opacity-0 translate-y-[-100%]" : "translate-y-0 opacity-100"
@@ -302,6 +322,7 @@ onClick={() => {
           >
             CLOSE
           </span>
+        </div>
         </div>
         <div className={`w-fit flex justify-center items-center absolute duration-300 ease-in-out right-[20%] ${projectOpen?"rotate-[135deg] opacity-100":"opacity-0 rotate-45 delay-200"}`}>
           <span className="w-[0.5vw] h-[1px] bg-black"/>
