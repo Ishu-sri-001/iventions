@@ -9,12 +9,14 @@ const ClipPath = ({ clipRef }) => {
       gsap.set('.clip-container', {
         scale: 0,
         rotateZ: -180,
+        y:'-4vw',
+        x:'2vw',
       })
       const tl = gsap.timeline()
       tl.to('.clip-container', {
         scale: 1,
-        duration: 0.75,
-        ease:'power2.in'
+        duration: 1,
+        ease:'power3.in'
       })
       .to('.bottom-clip', {
         clipPath: 'polygon(50% 2.45%, 100% 38.41%, 100% 100%, 0% 100%, 0% 40.5%)',
@@ -23,9 +25,15 @@ const ClipPath = ({ clipRef }) => {
       },'-=0.2')
       .to('.clip-container', {
         rotateZ: 0,
-        duration:0.7,
-        ease:'power2.inOut'
-      })
+        duration:1.2,
+        y:'8vw',
+        x:'-2vw',
+          // ease: "cubic-bezier(0.76, 0, 0.24, 1)",
+          // ease:'cubic-bezier(0.45, 0, 0.55, 1)',
+          // ease:'cubic-bezier(0.65,0,0.35,1)'
+        // ease: CustomEase.create("custom", "M0,0,C0.126,0.382,0.282,0.674,0.44,0.822,0.632,1.002,0.818,1.001,1,1"),
+        ease:'power4.inOut'
+      },'=-0.3')
     })
     return () => ctx.revert()
   }, [])

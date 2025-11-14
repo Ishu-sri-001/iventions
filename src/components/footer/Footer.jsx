@@ -91,7 +91,7 @@ const Footer = () => {
     <div className='h-fit translate-y-[-50%] w-full relative z-5' id='footer-wrapper'>
     <footer 
       ref={containerRef}
-      className='w-full h-screen mt-0 sticky top-0 bg-[#1E1E1E] flex flex-col items-stretch justify-between p-[2vw]'
+      className='w-full h-screen mt-0 pointer-events-auto sticky top-0 bg-[#1E1E1E] flex flex-col items-stretch justify-between p-[2vw]'
       onMouseMove={handleMouseMove}
     >
       

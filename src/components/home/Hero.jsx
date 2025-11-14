@@ -144,7 +144,7 @@ const Hero = () => {
       onMouseLeave={handleMouseLeave}
       className="w-screen h-[140vh] relative  "
     >
-      <div className="fixed inset-0 bg-[#F3EFEB] h-full w-full ivention-overlay z-10">
+      <div className="fixed inset-0 bg-[#F3EFEB] pointer-events-none h-full w-full ivention-overlay z-10">
 
       </div>
 

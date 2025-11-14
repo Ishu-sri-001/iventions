@@ -92,10 +92,7 @@ const CaseStudy2 = () => {
     return () => ctx.revert()
   }, [])
 
-  // ============================
-  //      TEXT / SLIDE ANIM
-  // ============================
-
+  
   const animateTextIn = () => {
     const split = new SplitText('.slider-content', {
       type: 'lines',
@@ -171,7 +168,7 @@ const CaseStudy2 = () => {
   }, [current])
 
   return (
-    <section id='casee-study' className='relative h-[200vh] z-0 bg-[#9C93E8]'>
+    <section id='casee-study' className='relative h-[120vh] z-0 bg-[#9C93E8]'>
       <style jsx>{`
         .line {
           overflow: hidden;

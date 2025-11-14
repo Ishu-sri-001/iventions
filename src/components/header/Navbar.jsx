@@ -156,7 +156,7 @@ const getClipPathFromPosition = (x, width) => {
 
     <div >
 
-      <div className="w-full flex  justify-center fixed top-0 z-10 pt-[1vw] h-[2vw] mix-blend-exclusion invert">
+      <div className="w-full flex  justify-center fixed top-0 z-9999 pt-[1vw] h-[2vw] mix-blend-exclusion invert">
          <Image
           src="/assets/svg/icon-logo.svg"
           alt="logo"
@@ -263,7 +263,7 @@ const getClipPathFromPosition = (x, width) => {
 
       <div
         ref={menuOverlayRef}
-        className="fixed top-0 left-0 z-[9999] w-[127vw] h-[125vh] rounded-br-full overflow-hidden "
+        className="fixed top-0 left-0 z-[9999] w-[128vw] h-[125vh] rounded-br-full overflow-hidden "
         style={{ transformOrigin: "top left", scale: 0 }}
       > <div
         className={` w-full h-full navbar-clip-path transition-all duration-700 ${
@@ -272,7 +272,7 @@ const getClipPathFromPosition = (x, width) => {
         
       >
         <div
-          className={`flex flex-col items-end justify-end origin-left mr-[28vw] pb-[15vw] h-full text-center space-y-6  ${
+          className={`flex flex-col items-end justify-end origin-left mr-[29vw] pb-[14vw] h-full text-center space-y-6  ${
             menuOpen ? "opacity-100 delay-500" : "opacity-0"
           }`}
         >
