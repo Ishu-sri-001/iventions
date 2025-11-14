@@ -9,6 +9,7 @@ import Insights from "@/components/home/Insights";
 import QuoteContact from "@/components/home/QuoteContact";
 import Footer from "@/components/footer/Footer";
 import Stats from "@/components/home/Stats";
+import CaseStudy2 from "@/components/home/CaseStudy2";
 
 export default function Home() {
   return (
@@ -16,12 +17,11 @@ export default function Home() {
     <Navbar />
       <Hero />
       <About />
-      <Categories />
-      <CaseStudy />
+      {/* <Categories /> */}
+      <CaseStudy2 />
       <Stats />
-      {/* <Insights/> */}
       <QuoteContact />
-      {/* <ProjectsDelievered /> */}
+      <ProjectsDelievered />
       <Footer />
 
     </>
