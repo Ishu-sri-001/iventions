@@ -239,10 +239,10 @@ const CaseStudy2 = () => {
           <div className='flex justify-between items-center mt-[3vh] text-[0.8vw]'>
             <div className='flex gap-[1vw]'>
               <div onClick={() => animateSlideChange('prev')}>
-                <IconButton icon='/assets/icons/prev-icon.svg' pad='w-[3.5vw]' />
+                <IconButton icon='/assets/icons/prev-icon.svg' pad='w-[3.5vw] h-[3.5vw] ' />
               </div>
               <div onClick={() => animateSlideChange('next')}>
-                <IconButton icon='/assets/icons/next-icon.svg' pad='w-[3.5vw]' />
+                <IconButton icon='/assets/icons/next-icon.svg' pad='w-[3.5vw] h-[3.5vw]' />
               </div>
             </div>
 

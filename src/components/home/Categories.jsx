@@ -90,8 +90,8 @@ const SliderCard = ({
 
               <IconButton
                 icon="/assets/icons/arrow.svg"
-                height="4vw"
-                pad="w-[4.5vw]"
+                // height="5vw"
+                pad="w-[4.2vw] h-[4.2vw]"
                 />
            
                 </div>
