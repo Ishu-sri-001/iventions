@@ -204,7 +204,7 @@ const Categories = () => {
               start: "50% bottom",
               end: "bottom 60%",
               scrub: true,
-              markers:true,
+              // markers:true,
             },
           },
           0
@@ -219,7 +219,7 @@ const Categories = () => {
           end: `+=${(numCards - 1) * 100}%`,
           scrub: true,
           // pin: true,
-          markers: true,
+          // markers: true,
         },
       });
 
