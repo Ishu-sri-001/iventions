@@ -63,7 +63,7 @@ const SliderCard = ({
 }) => {
   return (
     <div
-      className={`flex-shrink-0 w-full origin-center h-full justify-between flex items-stretch overflow-hidden ${backgroundColor}`}a
+      className={`flex-shrink-0 w-full origin-center h-full justify-between flex items-stretch overflow-hidden ${backgroundColor}`}
     >
       <div className="w-[55%] h-[100%] flex flex-col justify-between py-[4vw] px-[2vw]">
         <div>
@@ -141,6 +141,43 @@ const Categories = () => {
       const cards = cardsRef.current;
       const numCards = cards.length;
 
+    
+        // SINGLE IMAGE SCALE SCROLLTRIGGER USING containerRef
+      ScrollTrigger.create({
+  trigger: containerRef.current,
+  start: "top top",
+  end: `+=${(numCards - 1) * 100}%`,
+  scrub: true,
+  // markers: true,
+  onUpdate: (self) => {
+    const p = self.progress; // 0 → 1
+
+    cards.forEach((card, index) => {
+      const img = card.querySelector(".card-image");
+      if (!img) return;
+
+      const segmentStart = (index - 1) / (numCards - 1);
+      const segmentEnd = index / (numCards - 1);
+
+      // Local progress of THIS card sliding in
+      let local = (p - segmentStart) / (segmentEnd - segmentStart);
+      local = gsap.utils.clamp(0, 1, local);
+
+      // Scale during ONLY the slide-up moment
+      const scale = 1.2 - local * 0.2; // 1.2 → 1.0
+
+      gsap.to(img, {
+        scale,
+        overwrite: true,
+        duration: 0.1,
+      });
+    });
+  },
+});
+
+
+
+
       // Initial setup
       cards.forEach((card, i) => {
         gsap.set(card, {
@@ -167,7 +204,7 @@ const Categories = () => {
               start: "50% bottom",
               end: "bottom 60%",
               scrub: true,
-              // markers:true,
+              markers:true,
             },
           },
           0
@@ -182,7 +219,7 @@ const Categories = () => {
           end: `+=${(numCards - 1) * 100}%`,
           scrub: true,
           // pin: true,
-          // markers: true,
+          markers: true,
         },
       });
 
@@ -205,7 +242,7 @@ const Categories = () => {
           tl.fromTo(
             currentCardImage,
             {
-              scale: 1.5,
+              scale: 1.2,
             }, {
               scale:1,
               ease: "power2.out",
@@ -238,6 +275,8 @@ const Categories = () => {
         );
       }
     }, containerRef);
+
+    
 
     return () => ctx.revert();
   }, []);
