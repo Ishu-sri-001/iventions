@@ -293,7 +293,7 @@ const mids = [
         </div>
 
         <div className="w-[22%]">
-          <div className="h-[8vw] bg-gray-300 relative overflow-hidden w-full">
+          <div className="h-[8vw]  relative overflow-hidden w-full">
             {content.map((no, idx) => (
               <p
                 key={idx}
