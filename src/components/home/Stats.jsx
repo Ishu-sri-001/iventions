@@ -66,7 +66,7 @@ const mids = [
           trigger: "#insights",
           start: `${startPos}% 20.5%`,
           end: `${endPos}% 20.5%`,
-          markers:true,
+          // markers:true,
 
           onEnter: () => {
             if (i > 0) {
