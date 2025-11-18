@@ -13,16 +13,29 @@ export default function Navbar() {
   const lenis = useLenis();
 
   useEffect(() => {
+    gsap.set('.nav-menu-item', {
+      yPercent:-100,
+      // opacity:1,
+    })
     const ctx= gsap.context(() => {
+      gsap.fromTo('.nav-menu-item-first', {
+        yPercent:-100,
+      }, {
+        yPercent:0,
+        delay:0.5,
+          ease:'power2.out',
+          duration:0.4,
+      })
       gsap.fromTo('.nav-menu-item', {
-          opacity:0,
+          yPercent:-100,
+          
       },
       {
-        opacity:1,
-        stagger:0.05,
-        duration:0.3,
+        yPercent:0,
+        stagger:0.2,
+          duration: 0.7,
         ease:'power2.out',
-        delay:0.5,
+        delay:1,
       })
     })
     return () => ctx.revert();
@@ -40,6 +53,7 @@ export default function Navbar() {
   }, [menuOpen, projectOpen]);
 
   const projectOverlayRef = useRef(null);
+  const projectWrapperRef = useRef(null);
   const animationRef = useRef(null);
   const menuOverlayRef = useRef(null);
 
@@ -65,15 +79,16 @@ const getClipPathFromPosition = (x, width) => {
   const normalizedX = x / width;
   const easedX = 1 - Math.pow(1 - normalizedX, 2.2); // smooth near right
 
-  // Right side expands more
-  const bottomLeftX = 5 + easedX * 80;
-  const leftY = 5 + easedX * 50;
+  // Increased right side movement
+  const bottomLeftX = 5 + easedX * 75; // increased from 61.25 to 75 for more right movement
+  const leftY = 5 + easedX * 89; // increased from 70.25 to 85 for more vertical movement
 
-  // NEW: Left side retracts as right expands
-  const leftX = easedX * 4; // tweak 4 → controls how much left side moves inward
+  // Left side movement
+  const leftX = easedX * 8;
 
-  return `polygon(100% 0%, 100% 9.7%, ${bottomLeftX}% 100%, ${leftX}% 100%, ${leftX}% ${leftY}%, 98% 0%)`;
+  return `polygon(100% 0%, 100% 4.75%, ${bottomLeftX}% 100%, ${leftX}% 100%, ${leftX}% ${leftY}%, 92.5% 0%)`;
 };
+
 
 
   const handleProjectHover = (e) => {
@@ -92,73 +107,68 @@ const getClipPathFromPosition = (x, width) => {
   };
 
   useEffect(() => {
-  const overlay = projectOverlayRef.current;
+  const wrapper = projectWrapperRef.current;
   
-  if (!overlay) return;
+  if (!wrapper) return;
+
+  const closedClip = "circle(0% at 100% 0%)";
+  const openClip = "circle(160% at 100% 0%)";
 
   if (projectOpen) {
-    // Prepare for animation
-    gsap.set(overlay, {
+    // Set initial clip path on the inner overlay
+    gsap.set(projectOverlayRef.current, {
       clipPath:
-        "polygon(100% 0%, 100% 9.7%, 66.25% 100%, 0% 100%, 0% 75.25%, 98% 0%)",
-        
-        borderBottomLeftRadius: "5vw",
-       transformOrigin: "top right",
+        "polygon(100% 0%, 100% 4.75%, 66.25% 100%, 0% 100%, 0% 75.25%, 92.5% 0%)",
+      borderBottomLeftRadius: "5vw",
     });
-    gsap.set('.projectt-overlay', {
-      transformOrigin: "top right",
-    })
 
-    // Animate IN from top right
+    // Animate wrapper with circle clip-path
     gsap.fromTo(
-      '.projectt-overlay',
+      wrapper,
+      { clipPath: closedClip },
       {
-        scale: 0,
-        opacity: 0,
-      },
-      {
-        scale: 1,
-        opacity: 1,
+        clipPath: openClip,
         duration: 0.8,
-        ease: "power3.inOut",
+        ease: "power1.inOut",
       }
     );
   } else {
-    // Animate OUT in the same direction (toward top right)
-    gsap.to('.projectt-overlay', {
-        scale: 0,
-      opacity: 0,
-      transformOrigin: "top right",
+    // Animate OUT
+    gsap.to(wrapper, {
+      clipPath: closedClip,
       duration: 0.8,
-      ease: "power3.inOut",
-      
+      ease: "power1.inOut",
     });
   }
 }, [projectOpen]);
 
   useEffect(() => {
-    const overlay = menuOverlayRef.current;
-    if (!overlay) return;
+  const overlay = menuOverlayRef.current;
+  if (!overlay) return;
 
-    // gsap.set(overlay, {
-    //   transformOrigin: "top left",
-    //   scale: 0,
-    // });
+  const closedClip = "circle(0% at 0% 0%)";
+  const openClip = "circle(160% at 0% 0%)"; 
+  // 160% so circle fully covers 128vw x 125vh
 
-    if (menuOpen) {
-      gsap.to(overlay, {
-        scale: 1,
+  if (menuOpen) {
+    gsap.fromTo(
+      overlay,
+      { clipPath: closedClip },
+      {
+        clipPath: openClip,
         duration: 0.8,
-        ease: "power3.inOut",
-      });
-    } else {
-      gsap.to(overlay, {
-        scale: 0,
-        duration: 0.8,
-        ease: "power3.inOut",
-      });
-    }
-  }, [menuOpen]);
+        ease: "power1.inOut",
+      }
+    );
+  } else {
+    gsap.to(overlay, {
+      clipPath: closedClip,
+      duration: 0.8,
+      ease: "power1.inOut",
+    });
+  }
+}, [menuOpen]);
+
 
 
   const handleMenuHover = () => {
@@ -167,7 +177,7 @@ const getClipPathFromPosition = (x, width) => {
       setTimeout(() => setHasAnimated(false), 500);
     }
     gsap.fromTo('.menu-below-text', {
-      y:'2vw',
+      y:'1vw',
       opacity:0,
     }, {
       y:'0vw',
@@ -175,14 +185,14 @@ const getClipPathFromPosition = (x, width) => {
       duration:0.3,
     })
     gsap.to('.menu-top-text', {
-      y:'-2vw',
+      y:'-1vw',
       duration:0.3,
     })
   };
 
   const leaveNav = () => {
       gsap.to('.menu-top-text', { y: '0vw', duration: 0, ease: "linear" });
-      gsap.to('.menu-below-text', { y: '2vw', duration: 0, ease: "linear" });
+      gsap.to('.menu-below-text', { y: '1vw', duration: 0, ease: "linear" });
     };
 
     const handleProjectEnter = () => {
@@ -210,7 +220,7 @@ const getClipPathFromPosition = (x, width) => {
 
     <div id='navbar-over' className="space-y-0" >
 
-      <div className="w-full flex opacity-0 nav-menu-item justify-center fixed top-0 z-9999 pt-[1vw] h-[2vw] mix-blend-exclusion invert">
+      <div className="w-full flex  origin-top nav-menu-item-first justify-center fixed top-0 z-9999 pt-[1vw] h-[2vw] mix-blend-exclusion invert">
          <Image
           src="/assets/svg/icon-logo.svg"
           alt="logo"
@@ -230,7 +240,7 @@ const getClipPathFromPosition = (x, width) => {
   }}
         onMouseEnter={handleMenuHover}
         onMouseLeave={leaveNav}
-        className="flex opacity-0 overflow-hidden nav-menu-item items-center group gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw] transition-all z-10000 relative"
+        className="flex  overflow-hidden  nav-menu-item items-center group gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw]  z-10000 relative"
       >
         <div className="flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative group cursor-pointer">
           <span
@@ -253,14 +263,28 @@ const getClipPathFromPosition = (x, width) => {
             }`}
           ></span>
         </div>
+       <div className="h-[1vw] relative group overflow-hidden">
 
-        <span className="text-[0.7vw] menu-top-text font-body font-semibold">
-          {menuOpen ? "CLOSE" : "MENU"}
-        </span>
+  <div
+    className="
+      w-full h-[2vw]
+      transition-none
+      group-hover:transition-all group-hover:duration-300
+      group-hover:translate-y-[-1vw]
+      flex flex-col items-start justify-end
+    "
+  >
+    <span className="text-[0.7vw] menu-top font-body font-semibold">
+      {menuOpen ? "CLOSE" : "MENU"}
+    </span>
 
-        <span className="text-[0.7vw] menu-below-text absolute translate-y-100 font-semibold font-body right-[22.5%]">
-            {menuOpen ? "CLOSE" : "MENU"}
-        </span>
+    <span className="text-[0.7vw] menu-below- font-semibold font-body">
+      {menuOpen ? "CLOSE" : "MENU"}
+    </span>
+  </div>
+
+</div>
+
       </button>
 
       {/* Center - Logo */}
@@ -283,46 +307,62 @@ onClick={() => {
     if (menuOpen) setMenuOpen(false); 
     setProjectOpen(!projectOpen);
   }}
-          className={`relative nav-menu-item opacity-0 flex items-center overflow-hidden justify-center z-[10002] cursor-pointer outline-none bg-yellow px-[1vw] h-full py-[1vw] rounded-bl-[1vw] transition-all group `}
+          className={`relative nav-menu-item  flex items-center overflow-hidden justify-center  cursor-pointer outline-none bg-yellow px-[1vw] h-full py-[1vw] rounded-bl-[1vw]  group ${menuOpen? 'z-9995': 'z-10002'}`}
       >
         
         <div className="relative w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
           <div className="absolute project-top-text w-full h-full flex items-center justify-center overflow-hidden">
 
           <span
-            className={`absolute transition-all duration-300 ease-in-out font-body text-[0.7vw] font-semibold ${
-              projectOpen ? "opacity-0 translate-y-[-100%]" : "translate-y-0 opacity-100"
-            }`}
-            >
-            GOT A PROJECT?
-          </span>
-          <span
-            className={`absolute transition-all duration-300 ease-in-out font-body text-[0.7vw] font-semibold ${
-              projectOpen
-              ? "translate-y-0 opacity-100 delay-200"
-              : "translate-y-full opacity-0"
-            }`}
-            >
-            CLOSE
-          </span>
+  className={`
+    absolute font-body text-[0.7vw] font-semibold
+    ${projectOpen 
+      ? "transition-all duration-300 opacity-0 translate-y-[-100%]" 
+      : "transition-none translate-y-0 opacity-100"
+    }
+  `}
+>
+  GOT A PROJECT?
+</span>
+
+<span
+  className={`
+    absolute font-body text-[0.7vw] font-semibold
+    ${projectOpen
+      ? "transition-all duration-300 translate-y-0 opacity-100 delay-200"
+      : "transition-none translate-y-full opacity-0"
+    }
+  `}
+>
+  CLOSE
+</span>
+
             </div>
            <div className="absolute project-below-text w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
           <span
-            className={`absolute transition-all duration-300 ease-in-out opacity-100 font-body text-[0.7vw] font-semibold ${
-              projectOpen ? " translate-y-[-100%]" : "translate-y-0 opacity-100"
-            }`}
-          >
-            GOT A PROJECT?
-          </span>
-          <span
-            className={`absolute transition-all duration-300 ease-in-out font-body text-[0.7vw] font-semibold ${
-              projectOpen
-                ? "translate-y-0 opacity-100 delay-200"
-                : "translate-y-full opacity-0"
-            }`}
-          >
-            CLOSE
-          </span>
+  className={`
+    absolute font-body text-[0.7vw] font-semibold
+    ${projectOpen
+      ? "transition-all duration-300 translate-y-[-100%] opacity-0"
+      : "transition-none translate-y-0 opacity-100"
+    }
+  `}
+>
+  GOT A PROJECT?
+</span>
+
+<span
+  className={`
+    absolute font-body text-[0.7vw] font-semibold
+    ${projectOpen
+      ? "transition-all duration-300 translate-y-0 opacity-100 delay-200"
+      : "transition-none translate-y-full opacity-0"
+    }
+  `}
+>
+  CLOSE
+</span>
+
         </div>
         </div>
         <div className={`w-fit flex justify-center items-center absolute duration-300 ease-in-out right-[20%] ${projectOpen?"rotate-[135deg] opacity-100":"opacity-0 rotate-45 delay-200"}`}>
@@ -339,7 +379,7 @@ onClick={() => {
       <div
         ref={menuOverlayRef}
         className="fixed top-0 left-0 z-[9999] w-[128vw] h-[125vh] rounded-br-full overflow-hidden "
-        style={{ transformOrigin: "top left", scale: 0 }}
+          style={{ clipPath: "circle(0% at 0% 0%)" }}
       > <div
         className={` w-full h-full navbar-clip-path transition-all duration-700 ${
           menuOpen ? "pointer-events-auto" : "pointer-events-none"
@@ -348,14 +388,14 @@ onClick={() => {
       >
         <div
           className={`flex flex-col items-end justify-end origin-left mr-[29vw] pb-[15vw] h-full text-center space-y-6  ${
-            menuOpen ? "opacity-100 delay-700" : "opacity-0"
+            menuOpen ? "opacity-100 delay" : "opacity-100"
           }`}
         >
           <ul className="font-medium">
             {navItems.map((item, i) => (
               <li
                 key={i}
-                className={`leading-none text-right transition-opacity duration-300 ${
+                className={`leading-none w-fit h-fit  text-right transition-opacity ease-in-out duration-300 ${
                   hoveredIndex !== null && hoveredIndex !== i
                     ? "opacity-50"
                     : "opacity-100"
@@ -377,10 +417,11 @@ onClick={() => {
       </div>
 
       {/* PROJECT OVERLAY */}
-      <div className="fixed  top-[-5%] projectt-overlay z-10001  left-[-30%] w-[130vw] h-[135vh] rounded-bl-full overflow-hidden"
-          style={{
-          transformOrigin: "top right",
-          transform: projectOpen ? "scale(1)" : "scale(0)",
+      <div 
+        ref={projectWrapperRef}
+        className="fixed top-0 right-0 z-10001 w-[130vw] h-[135vh] rounded-bl-full overflow-hidden"
+        style={{
+          clipPath: "circle(0% at 100% 0%)",
         }}
       >
 
@@ -393,20 +434,20 @@ onClick={() => {
         
         >
        
-        <div className="h-full w-full px-[2vw] flex ">
+        <div className="h-[70%] w-full px-[2vw] flex ">
           <div className="w-[55%] flex flex-col items-end justify-center">
             <div className="w-[40%] cursor-pointer">
               <p className="text-[1.8vw]  leading-[1.2]]  font-display pb-[2vw]">
                 Get a Quote
               </p>
 
-              <div className="w-[28vw]   space-y-[2vw]">
+              <div className="w-[28vw] space-y-[2vw]">
                 <div className="group">
-                  <p className="text-[4vw]  relative  leading-[1.1]  font-third ">
+                  <p className="text-[4vw]  relative tracking-tighter  leading-[1.1] font-third ">
                     Have an event
                     <span className="absolute bottom-0 scale-x-0 transition-all ease-out duration-1000 origin-left group-hover:scale-x-100 left-0 w-full h-[0.2px] bg-black"></span>
                   </p>
-                  <p className="text-[4vw] w-fit relative  leading-[1.1]  font-third ">
+                  <p className="text-[4vw] tracking-tighter w-fit relative  leading-[1.1]  font-third ">
                     in mind ?
                     <span className="absolute bottom-0 scale-x-0 transition-all ease-out duration-1000 origin-left group-hover:scale-x-100 left-0 w-full h-[0.2px] bg-black"></span>
                   </p>
@@ -427,11 +468,11 @@ onClick={() => {
 
               <div className="w-[33vw]   space-y-[2vw]">
                 <div className="group">
-                  <p className="text-[4vw]  relative  leading-[1.1]  font-third ">
+                  <p className="text-[4vw]  relative  leading-[1.1] tracking-tighter  font-third font ">
                     Got a big version ?
                     <span className="absolute bottom-0 scale-x-0 transition-all ease-in-out duration-400 origin-left group-hover:scale-x-100 left-0 w-full h-[0.2px] bg-black"></span>
                   </p>
-                  <p className="text-[4vw] w-fit relative  leading-[1.1]  font-third ">
+                  <p className="text-[4vw] w-fit relative  leading-[1.1] tracking-tighter font-third ">
                     or a big idea ?
                     <span className="absolute bottom-0 scale-x-0 transition-all ease-in-out duration-400 origin-left group-hover:scale-x-100 left-0 w-full h-[0.2px] bg-black"></span>
                   </p>

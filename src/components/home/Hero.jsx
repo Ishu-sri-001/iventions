@@ -25,6 +25,7 @@ const Hero = () => {
         });
 
         gsap.set('.ivention-overlay', {
+          delay:0.2,
           opacity:0,
         })
 
@@ -37,22 +38,30 @@ const Hero = () => {
           ease: "power3.out",
         })
 
-      gsap.to('.hero-video', {
-        scale: 3.0,
-        rotateX: 0,
-        rotateY: 0,
-        scrollTrigger: {
-          trigger: '#hero',
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: true,
-          // markers:true,
-          onUpdate: (self) => {
-            // Disable mouse effects only when scroll is complete
-            setIsFullyScaled(self.progress >= 0.90);
-          },
-        }
-      });
+  //       gsap.set('.hero-video', {
+  //    rotateX: baseRotateX,
+  //    rotateY: baseRotateY,
+  //  })
+
+     gsap.fromTo('.hero-video', 
+  { rotateX: baseRotateX, rotateY: baseRotateY }, 
+  {
+    scale: 3,
+    rotateX: 0,
+    rotateY: 0,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.8,
+      immediateRender: false, // IMPORTANT
+      onUpdate: (self) => {
+        setIsFullyScaled(self.progress >= 0.90);
+      },
+    }
+  }
+);
 
         
         tl.to(videoRef.current, {
@@ -176,10 +185,10 @@ const Hero = () => {
 
       {/* TEXT LAYER */}
       <div className="absolute inset-0 h-full w-full flex items-center text-[#101417] justify-between z-20 px-[3vw]">
-        <p className="text-[2.5vw] font-third leading-none hero-text">
+        <p className="text-[2.5vw] font-third leading-[1.1] hero-text">
           Step into <br /> the Spotlight
         </p>
-        <p className="w-[23%] text-[1.3vw] leading-normal hero-text">
+        <p className="w-[23%] text-[1.3vw] leading-none hero-text">
           We craft world-class spaces & events memories, initiate conversations
           and elevate ambitions.
         </p>

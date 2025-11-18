@@ -13,6 +13,7 @@ export default function ClippedTextSection() {
   const [nextSlideIndex, setNextSlideIndex] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isMouseInSlider, setIsMouseInSlider] = useState(false);
+  const [showText, setShowText] = useState(false);
   const textRef = useRef(null);
   const autoPlayTimerRef = useRef(null);
   const sectionRef = useRef(null);
@@ -144,6 +145,8 @@ export default function ClippedTextSection() {
   useEffect(() => {
     if (!isSliderActive || !textRef.current) return;
 
+    setShowText(true);
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
@@ -166,6 +169,34 @@ export default function ClippedTextSection() {
 
     return () => ctx.revert();
   }, [currentSlide, isSliderActive]);
+
+  // Exit animation when slider deactivates
+  useEffect(() => {
+    if (isSliderActive || !textRef.current) return;
+
+    const ctx = gsap.context(() => {
+      requestAnimationFrame(() => {
+        const splitText = new SplitText(".about-slider-text", {
+          type: "chars,lines",
+          linesClass: "lines",
+          mask: "lines",
+        });
+
+        gsap.to(splitText.lines, {
+          yPercent: 100,
+          opacity: 0,
+          stagger: 0.05,
+          duration: 0.8,
+          ease: "power3.in",
+          onComplete: () => {
+            setShowText(false);
+          },
+        });
+      });
+    }, textRef);
+
+    return () => ctx.revert();
+  }, [isSliderActive]);
 
   // Slide navigation with transition
   const changeSlide = (newIndex) => {
@@ -370,7 +401,7 @@ export default function ClippedTextSection() {
           </div>
         )}
 
-        {isSliderActive && (
+        {(isSliderActive || showText) && (
           <div
             ref={textRef}
             className="absolute left-[35%] w-[60%] min-h-[20vw] top-[75%] -translate-y-1/2 flex flex-col justify-between gap-3 text-white pointer-events-none"

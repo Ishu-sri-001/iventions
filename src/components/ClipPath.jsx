@@ -16,6 +16,7 @@ const ClipPath = ({ clipRef }) => {
       tl.to('.clip-container', {
         scale: 1,
         duration: 1,
+        delay:0.2,
         ease:'power3.in'
       })
       .to('.bottom-clip', {

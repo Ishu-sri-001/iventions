@@ -65,7 +65,7 @@ const SliderCard = ({
     <div
       className={`flex-shrink-0 w-full origin-center h-full justify-between flex items-stretch overflow-hidden ${backgroundColor}`}
     >
-      <div className="w-[55%] flex flex-col justify-between p-[4vw]">
+      <div className="w-[55%] flex flex-col justify-between py-[4vw] px-[2vw]">
         <div>
           <h2 className="text-[7vw] font-third f mb-[2vw]">{category}</h2>
         </div>
@@ -89,7 +89,7 @@ const SliderCard = ({
               
 
               <IconButton
-                icon="/assets/icons/arrow.svg"
+                icon="/assets/icons/icon-arrow.svg"
                 // height="5vw"
                 pad="w-[4.2vw] h-[4.2vw]"
                 />
@@ -101,7 +101,7 @@ const SliderCard = ({
         </div>
       </div>
 
-      <div className="w-[40%] h-[85%] my-auto p-[4vw]">
+      <div className="w-[40%] h-[75%] my-auto p-[4vw]">
         <div className="h-full w-full overflow-hidden rounded-[2vw]">
           <Image
             width={1000}
