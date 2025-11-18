@@ -121,8 +121,9 @@ body {
     transition: transform 0.3s rase;
 }
 
-.mid-nos-top p sup,
+/* .mid-nos-top p sup,
 .mid-nos p sup {
-  font-size: 8vw;    
+  font-size: 5vw;    
+  padding-bottom: 3vw;
  
-}
+} */

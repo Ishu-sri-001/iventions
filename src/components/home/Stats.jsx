@@ -312,7 +312,7 @@ const mids = [
             {mids.map((no, idx) => (
               <p
   key={idx}
-  className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 text-yellow text-[11vw] font-bold"
+  className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 text-yellow text-[10vw] font-bold"
   dangerouslySetInnerHTML={{ __html: no }}
 ></p>
 
