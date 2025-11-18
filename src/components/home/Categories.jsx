@@ -63,9 +63,9 @@ const SliderCard = ({
 }) => {
   return (
     <div
-      className={`flex-shrink-0 w-full origin-center h-full justify-between flex items-stretch overflow-hidden ${backgroundColor}`}
+      className={`flex-shrink-0 w-full origin-center h-full justify-between flex items-stretch overflow-hidden ${backgroundColor}`}a
     >
-      <div className="w-[55%] flex flex-col justify-between py-[4vw] px-[2vw]">
+      <div className="w-[55%] h-[100%] flex flex-col justify-between py-[4vw] px-[2vw]">
         <div>
           <h2 className="text-[7vw] font-third f mb-[2vw]">{category}</h2>
         </div>
@@ -85,7 +85,23 @@ const SliderCard = ({
 
             <div className="flex gap-[1vw] items-center">
 
-            <TextAnim text={cta} textSize='text-[2.5vw] font-third text-neutral-800' />
+            {/* <TextAnim text={cta} textSize='text-[2.5vw] font-third text-neutral-800' /> */}
+
+            <button
+      className={`relative px-[1vw] group flex items-start justify-center overflow-hidden  cursor-pointer h-[3.5vw]  w-fit  font-body  text-black text-[0.7vw] font-semibold rounded-[2vw] ${backgroundColor}`}
+    >
+
+      <div className={` w-fit transition-none group-hover:transition-all group-hover:duration-300 group-hover:translate-y-[-3vw] flex flex-col items-start justify-end`}>
+        <p className={`text-[2vw] `}>
+
+          {cta}
+        </p>
+         <p className={`text-[2vw] `}>
+
+          {cta}
+        </p>
+      </div>
+    </button>
               
 
               <IconButton
@@ -139,15 +155,17 @@ const Categories = () => {
 
       const firstImage = cards[0].querySelector(".card-image");
       if (firstImage) {
-        gsap.to(
+        gsap.fromTo(
           firstImage,
           {
             scale: 1.5,
+          }, {
+            scale:1,
             ease: "power2.out",
             scrollTrigger: {
               trigger: containerRef.current,
-              start: "top bottom",
-              end: "bottom bottom",
+              start: "50% bottom",
+              end: "bottom 60%",
               scrub: true,
               // markers:true,
             },
@@ -184,10 +202,12 @@ const Categories = () => {
 
         const currentCardImage = cards[i].querySelector(".card-image");
         if (currentCardImage) {
-          tl.to(
+          tl.fromTo(
             currentCardImage,
             {
               scale: 1.5,
+            }, {
+              scale:1,
               ease: "power2.out",
             },
             i - 1

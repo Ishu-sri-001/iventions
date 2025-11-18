@@ -260,7 +260,7 @@ export default function ClippedTextSection() {
   };
 
   return (
-    <section ref={sectionRef} id="about" className="relative w-screen h-[300vh]">
+    <section ref={sectionRef} id="about" className="relative w-screen h-[250vh]">
       <style jsx>{`
         @keyframes expandSingleV {
           0% {

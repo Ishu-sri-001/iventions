@@ -174,10 +174,89 @@ const Footer = () => {
         </div>
       </div>
 
+      <div className='w-full h-[3vw] text-white/80 flex justify-between '>
+
+              <div className='flex gap-[2vw] items-center'>
+
+                 <div className="h-[1vw] relative group overflow-hidden cursor-pointer">
+
+  <div
+    className="
+      w-full h-[2vw]
+      transition-none
+      group-hover:transition-all group-hover:duration-300
+      group-hover:translate-y-[-1vw]
+      flex flex-col items-start justify-end
+    "
+  >
+    <span className="text-[0.7vw] uppercase menu-top font-body font-semibold">
+     cookie policy
+    </span>
+
+    <span className="text-[0.7vw] uppercase menu-below- font-semibold font-body">
+Cookie policy    </span>
+  </div>
+
+</div>
+
+ <div className="h-[1vw] relative group overflow-hidden cursor-pointer">
+
+  <div
+    className="
+      w-full h-[2vw]
+      transition-none
+      group-hover:transition-all group-hover:duration-300
+      group-hover:translate-y-[-1vw]
+      flex flex-col items-start justify-end
+    "
+  >
+    <span className="text-[0.7vw] uppercase menu-top font-body font-semibold">
+     LEGAL NOTICE & TERMS OF USE
+    </span>
+
+    <span className="text-[0.7vw] uppercase menu-below- font-semibold font-body">
+         LEGAL NOTICE & TERMS OF USE
+    </span>
+  </div>
+
+</div>
+
+ <div className="h-[1vw] relative group overflow-hidden cursor-pointer">
+
+  <div
+    className="
+      w-full h-[2vw]
+      transition-none
+      group-hover:transition-all group-hover:duration-300
+      group-hover:translate-y-[-1vw]
+      flex flex-col items-start justify-end
+    "
+  >
+    <span className="text-[0.7vw] uppercase menu-top font-body font-semibold">
+     privacy policy
+    </span>
+
+    <span className="text-[0.7vw] uppercase menu-below- font-semibold font-body">
+     privacy policy
+    </span>
+  </div>
+
+</div>
+
+              </div>
+
+              <div className='items-center flex pr-[5vw]'>
+                <span className="text-[0.7vw] uppercase menu-top font-body font-semibold">
+                  copyright @iventions 2025
+                </span>
+              </div>
+
+      </div>
+
       {/* BOTTOM SVG SECTION */}
-      <div className='relative w-full h-[25%] bg-[#1E1E1E] overflow-hidden'>
+      <div className='relative w-full h-[27%] bg-[#1E1E1E] overflow-hidden'>
         {/* BASE SVG */}
-        <svg preserveAspectRatio="none" width="100%" height="100%" viewBox="0 0 1856 266" className="absolute inset-0">
+        <svg preserveAspectRatio="none" width="100%" height="100%" viewBox="0 0 1856 266" className="absolute inset-0 object-contain w-full h-full">
           {/* Dark paths */}
           <g>
             <path d="M0 260V5H64V260H0Z" fill="#1E1E1E"></path>

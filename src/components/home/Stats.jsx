@@ -49,7 +49,7 @@ const Insights = () => {
 
       heading.forEach((_, i) => {
         const startPos = (i / total) * 70;
-        const endPos = startPos + 12;
+        const endPos = startPos + 14;
 
         if (!headingRefs.current[i] || !contentRefs.current[i]) return;
 
@@ -58,8 +58,8 @@ const Insights = () => {
 
         ScrollTrigger.create({
           trigger: "#insights",
-          start: `${startPos}% 20%`,
-          end: `${endPos}% 23%`,
+          start: `${startPos}% 20.5%`,
+          end: `${endPos}% 20.5%`,
           // markers:true,
 
           // === ON ENTER (scrolling down) ===
@@ -67,7 +67,7 @@ const Insights = () => {
             if (i > 0) {
               gsap.fromTo(
                 [headingRefs.current[i], contentRefs.current[i]],
-                { y: "8vw", opacity: 0 },
+                { y: "8vw",opacity:0},
                 { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
               );
 
@@ -103,13 +103,16 @@ const Insights = () => {
 
           // === ON ENTER BACK (scrolling up) ===
           onEnterBack: () => {
+            if(i===total-1)
+                return;
             gsap.fromTo(
               [headingRefs.current[i], contentRefs.current[i]],
-              { y: "-8vw", opacity: 0 },
+              { y: "-8vw", opacity:0},
               { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
             );
 
             // IMAGE CROSSFADE (scrolling up)
+            
             if (imageRefs.current[i + 1]) {
               gsap.to(imageRefs.current[i + 1], {
                 opacity: 0,
@@ -151,8 +154,9 @@ const Insights = () => {
 
         ScrollTrigger.create({
           trigger: midNosElements[i],
-          start: "top 50%",
+          start: "top 53%",
           end: "bottom 50%",
+          // markers:true,
 
           onEnter: () => {
             if (i > 0) {
@@ -175,6 +179,8 @@ const Insights = () => {
           },
 
           onEnterBack: () => {
+            if(i===total-1)
+                return;
             gsap.fromTo(
               midNosTopElements[i],
               { y: "-20vw" },

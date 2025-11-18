@@ -53,22 +53,23 @@ const CaseStudy2 = () => {
       gsap.set('.case-study-container', {
         clipPath:
           'polygon(100% 50%, 0% 50%, 0% 50%, 0% 50%, 0% 50%, 0% 50%)',
-        yPercent: -30,
+        yPercent: -10,
       })
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: '#casee-study',
-          start: 'top 60%',
-          end: '35% 40%',
+          start: 'top 50%',
+          end: '55% 50%',
           scrub: true,
+          // markers:true,
           invalidateOnRefresh: true,
         },
       })
 
       tl.fromTo(
         '.case-study-container',
-        { yPercent: -30 },
+        { yPercent: -10 },
         { yPercent: 0, ease: 'linear', duration: 1 }
       )
         .to(
