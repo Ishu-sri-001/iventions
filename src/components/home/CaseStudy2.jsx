@@ -169,7 +169,7 @@ const CaseStudy2 = () => {
   }, [current])
 
   return (
-    <section id='casee-study' className='relative h-[120vh] z-0 bg-[#9C93E8]'>
+    <section id='casee-study' className='relative h-[150vh] z-0 bg-[#9C93E8]'>
       <style jsx>{`
         .line {
           overflow: hidden;

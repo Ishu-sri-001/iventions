@@ -17,7 +17,13 @@ const Insights = () => {
   const baseRotateX = 5;
   const baseRotateY = -5;
 
-  const mids = ["270", "90%", "21", "31", "1.2K"];
+const mids = [
+  "270<sup>+</sup>",
+  "90<sup>%</sup>",
+  "21",
+  "31",
+  "1.2<sup>K</sup>",
+];
 
   const heading = [
     "Projects Delievered",
@@ -302,14 +308,14 @@ const Insights = () => {
         </div>
 
         <div className="h-[15vw] w-[30vw] overflow-hidden absolute z-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="h-full w-full relative space-y-[1vw] mid-nos-top">
+          <div className="h-full  w-full relative space-y-[1vw] mid-nos-top">
             {mids.map((no, idx) => (
               <p
-                key={idx}
-                className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 text-yellow text-[10vw] font-bold"
-              >
-                {no}
-              </p>
+  key={idx}
+  className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 text-yellow text-[11vw] font-bold"
+  dangerouslySetInnerHTML={{ __html: no }}
+></p>
+
             ))}
           </div>
         </div>
@@ -329,8 +335,9 @@ const Insights = () => {
                 <p
                   key={idx}
                   className="text-white h-[12vw] text-[10vw] font-bold text-center"
+                  dangerouslySetInnerHTML={{ __html: no }}
                 >
-                  {no}
+                  
                 </p>
               ))}
               <div className="w-full flex cursor-pointer justify-center mt-[5vw]">

@@ -183,7 +183,7 @@ const QuoteContact = () => {
             <p className="text-[0.8vw] font-semibold font-display uppercase">
               Get a custom quote
             </p>
-            <IconButton icon="/assets/icons/arrow.svg" pad="h-[3vw] w-[3vw]" />
+            <IconButton icon="/assets/icons/icon-arrow.svg" pad="h-[3vw] w-[3vw]" />
           </div>
         </div>
       </div>
@@ -212,7 +212,7 @@ const QuoteContact = () => {
             <p className="text-[0.8vw] font-semibold font-display uppercase">
               Contact us
             </p>
-            <IconButton icon="/assets/icons/arrow.svg" size="2vw" />
+            <IconButton icon="/assets/icons/icon-arrow.svg" pad="h-[3vw] w-[3vw]" />
           </div>
         </div>
       </div>

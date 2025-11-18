@@ -250,13 +250,13 @@ export default function Navbar() {
           onMouseLeave={leaveNav}
           className="flex  overflow-hidden  nav-menu-item items-center group gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw]  z-10000 relative"
         >
-          <div className="flex flex-col w-[1.4vw] justify-start gap-[0.2vw] relative group cursor-pointer">
+          <div className="flex flex-col w-[1vw] justify-start gap-[0.2vw] relative group cursor-pointer">
             <span
               className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 ${
                 hasAnimated ? "scale-x-0" : "scale-x-100"
               } ${
                 menuOpen
-                  ? "rotate-45 translate-y-[-0.5vw]"
+                  ? "rotate-45 translate-y-[-0.25vw]"
                   : "rotate-0 translate-y-0"
               }`}
             ></span>
@@ -277,7 +277,7 @@ export default function Navbar() {
       w-full h-[2vw]
       transition-none
       group-hover:transition-all group-hover:duration-300
-      group-hover:translate-y-[-1vw]
+      group-hover:translate-y-[-1.05vw]
       flex flex-col items-start justify-end
     "
             >
@@ -402,11 +402,11 @@ export default function Navbar() {
                 menuOpen ? "opacity-100 delay" : "opacity-100"
               }`}
             >
-              <ul className="font-medium">
+              <div className="font-medium text-right  flex flex-col items-end justify-end">
                 {navItems.map((item, i) => (
-                  <li
+                  <p
                     key={i}
-                    className={`leading-none w-fit h-fit  text-right transition-opacity ease-in-out duration-300 ${
+                    className={`leading-none w-fit h-fit  text-right! transition-opacity ease-in-out duration-300 ${
                       hoveredIndex !== null && hoveredIndex !== i
                         ? "opacity-50"
                         : "opacity-100"
@@ -420,9 +420,9 @@ export default function Navbar() {
                     >
                       {item.title}
                     </Link>
-                  </li>
+                  </p>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </div>
