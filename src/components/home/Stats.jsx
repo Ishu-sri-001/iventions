@@ -55,7 +55,7 @@ const mids = [
 
       heading.forEach((_, i) => {
         const startPos = (i / total) * 70;
-        const endPos = startPos + 14;
+        const endPos = startPos + 13.8;
 
         if (!headingRefs.current[i] || !contentRefs.current[i]) return;
 
@@ -66,9 +66,8 @@ const mids = [
           trigger: "#insights",
           start: `${startPos}% 20.5%`,
           end: `${endPos}% 20.5%`,
-          // markers:true,
+          markers:true,
 
-          // === ON ENTER (scrolling down) ===
           onEnter: () => {
             if (i > 0) {
               gsap.fromTo(
@@ -294,12 +293,12 @@ const mids = [
         </div>
 
         <div className="w-[22%]">
-          <div className="h-[8vw] relative overflow-hidden w-full">
+          <div className="h-[8vw] bg-gray-300 relative overflow-hidden w-full">
             {content.map((no, idx) => (
               <p
                 key={idx}
                 ref={(el) => (contentRefs.current[idx] = el)}
-                className="text-black w-full text-[1.3vw] opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 leading-[1.3] font-medium text-center"
+                className="text-black w-full text-[1.3vw] opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 leading-[1.2] font-medium text-center"
               >
                 {no}
               </p>
