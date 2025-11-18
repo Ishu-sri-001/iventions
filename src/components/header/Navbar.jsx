@@ -73,39 +73,35 @@ export default function Navbar() {
     { title: "Contact", href: "/contact" },
   ];
 
-  // const getClipPathFromPosition = (x, width) => {
-  //   const normalizedX = x / width;
-  //   const bottomLeftX = 2 + normalizedX * 90;
-  //   const leftY = 2 + normalizedX * 75;
-  //   return `polygon(100% 0%, 100% 6.7%, ${bottomLeftX}% 100%, 0% 100%, 0% ${leftY}%, 90% 0%)`;
-  // };
-
   const getClipPathFromPosition = (x, width) => {
     const normalizedX = x / width;
-    const easedX = 1 - Math.pow(1 - normalizedX, 2.2); // smooth near right
+    // Clamp normalizedX between 0.2 and 1 to allow more movement on both sides
+    const clampedX = Math.max(0.2, normalizedX);
+    const easedX = 1 - Math.pow(1 - clampedX, 2.2);
 
-    // Increased right side movement
-    const bottomLeftX = 5 + easedX * 75; // increased from 61.25 to 75 for more right movement
-    const leftY = 5 + easedX * 89; // increased from 70.25 to 85 for more vertical movement
-
-    // Left side movement
-    const leftX = easedX * 8;
+    const bottomLeftX = 5 + easedX * 75; // Increased from 65 to 70
+    const leftY = 5 + easedX * 75; // Increased from 75 to 82
+    const leftX = easedX * 7.5; // Increased from 6.5 to 7
 
     return `polygon(100% 0%, 100% 4.75%, ${bottomLeftX}% 100%, ${leftX}% 100%, ${leftX}% ${leftY}%, 92.5% 0%)`;
   };
 
   const handleProjectHover = (e) => {
     if (!projectOpen || !projectOverlayRef.current) return;
+
     const x = e.clientX;
     const width = window.innerWidth;
+
     const newClipPath = getClipPathFromPosition(x, width);
 
-    // Smooth hover distortion
+    if (animationRef.current) {
+      animationRef.current.kill();
+    }
+
     animationRef.current = gsap.to(projectOverlayRef.current, {
       clipPath: newClipPath,
-      duration: 0.4,
+      duration: 0.6,
       ease: "power2.out",
-      overwrite: true,
     });
   };
 
@@ -118,14 +114,12 @@ export default function Navbar() {
     const openClip = "circle(160% at 100% 0%)";
 
     if (projectOpen) {
-      // Set initial clip path on the inner overlay
       gsap.set(projectOverlayRef.current, {
         clipPath:
           "polygon(100% 0%, 100% 4.75%, 66.25% 100%, 0% 100%, 0% 75.25%, 92.5% 0%)",
         borderBottomLeftRadius: "5vw",
       });
 
-      // Animate wrapper with circle clip-path
       gsap.fromTo(
         wrapper,
         { clipPath: closedClip },
@@ -136,7 +130,6 @@ export default function Navbar() {
         }
       );
     } else {
-      // Animate OUT
       gsap.to(wrapper, {
         clipPath: closedClip,
         duration: 0.8,
@@ -151,7 +144,6 @@ export default function Navbar() {
 
     const closedClip = "circle(0% at 0% 0%)";
     const openClip = "circle(160% at 0% 0%)";
-    // 160% so circle fully covers 128vw x 125vh
 
     if (menuOpen) {
       gsap.fromTo(
@@ -292,17 +284,6 @@ export default function Navbar() {
           </div>
         </button>
 
-        {/* Center - Logo */}
-        {/* <div className="flex w-[7%] justify-center items-center my-auto">
-        <Image
-          src="/assets/svg/icon-logo.svg"
-          alt="logo"
-          width={500}
-          height={500}
-          className="object-contain "
-        />
-      </div> */}
-
         {/* Right - Got a Project */}
         <button
           disabled={menuOpen}
@@ -434,15 +415,15 @@ export default function Navbar() {
           style={{
             clipPath: "circle(0% at 100% 0%)",
           }}
+          onMouseMove={handleProjectHover}
         >
           <div
             ref={projectOverlayRef}
-            className={` bg-yellow w-full h-full ${
-              projectOpen ? "pointer-events-auto" : "pointer-events-none"
+            className={` bg-yellow w-full h-screen ${
+              projectOpen ? "pointer-events-auto z-0" : "pointer-events-none"
             }`}
-            onMouseMove={handleProjectHover}
           >
-            <div className="h-[70%] w-full px-[2vw] flex ">
+            <div className="h-[100%] w-full px-[2vw] flex ">
               <div className="w-[55%] flex flex-col items-end justify-center">
                 <div className="w-[40%] cursor-pointer">
                   <p className="text-[1.8vw]  leading-[1.2]]  font-display pb-[2vw]">
