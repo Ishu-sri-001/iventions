@@ -191,7 +191,7 @@ const QuoteContact = () => {
       {/* Right Clip Path */}
       <div
         ref={rightClipRef}
-        className="absolute flex z-10 flex-col cursor-pointer items-center gap-[15vw] py-[2vw] pl-[1.2vw] top-0 right-0 w-1/2 h-full bg-[#E0FF98] "
+        className="absolute flex z-10 flex-col !cursor-pointer !pointer-events-auto items-center gap-[15vw] py-[2vw] pl-[1.2vw] top-0 right-0 w-1/2 h-full bg-[#E0FF98] "
         style={{
           clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
         }}
@@ -220,11 +220,11 @@ const QuoteContact = () => {
       {/* Trigger Areas */}
       <div
         ref={leftTriggerRef}
-        className="absolute top-0 left-[10%] w-[28%] h-full z-10"
+        className="absolute top-0 left-[10%] w-[28%] h-full z-10 !pointer-events-auto cursor-pointer"
       ></div>
       <div
         ref={rightTriggerRef}
-        className="absolute top-0 right-[10%] w-[28%] h-full z-10"
+        className="absolute top-0 right-[10%] w-[28%] h-full z-10 cursor-pointer"
       ></div>
     </section>
     </div>
