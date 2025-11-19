@@ -118,7 +118,8 @@ export default function ClippedTextSection() {
     return () => ctx.revert();
   }, []);
 
-  const isSliderActive = scrollProgress >= 0.9;
+// Prevent flickering activation/deactivation
+const isSliderActive = scrollProgress >= 0.88;
 
   // Auto-play timer
   useEffect(() => {
@@ -161,8 +162,8 @@ export default function ClippedTextSection() {
           yPercent: 100,
           opacity: 0,
           stagger: 0.05,
-          duration: 0.8,
-          ease: "power3.out",
+          duration: 0.3,
+          ease: "power2.out",
         });
       });
     }, textRef);
@@ -186,8 +187,8 @@ export default function ClippedTextSection() {
           yPercent: 100,
           opacity: 0,
           stagger: 0.05,
-          duration: 0.8,
-          ease: "power3.in",
+          duration: 0.3,
+          ease: "power2.in",
           onComplete: () => {
             setShowText(false);
           },

@@ -12,7 +12,7 @@ const Footer = () => {
   const circleRef = useRef(null);
   const containerRef = useRef(null);
 
-  const [hoveredIndex, setHoveredIndex] = useState(null); // For Explore menu hover effect
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const navItems = [
     { title: "Home", href: "/" },
@@ -33,24 +33,21 @@ const Footer = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-        gsap.fromTo('#footer-wrapper', {
-          yPercent:-50,
-        }, {
+        gsap.to('#footer-wrapper', {
           yPercent:0,
           ease:'none',
           scrollTrigger: {
             trigger:'#footer-wrapper',
-             start: 'top bottom',
-          end:'bottom 50%',
-          scrub: true,
-          // markers:true,
+            start: 'top bottom',
+            end:'bottom 50%',
+            scrub: true,
+            immediateRender: false,
           }
-
         })
     })
     ScrollTrigger.refresh();
     return () => ctx.revert();
-  })
+  }, [])
 
   useEffect(() => {
     if (typeof window !== 'undefined' && containerRef.current) {
@@ -88,7 +85,7 @@ const Footer = () => {
   };
 
   return (
-    <div className='h-fit translate-y-[-50%] w-full relative z-5' id='footer-wrapper'>
+    <div className='h-fit w-full relative z-12 bg-black ' id='footer-wrapper' style={{ transform: 'translateY(0%)' }}>
     <footer 
       ref={containerRef}
       className='w-full h-screen mt-0 pointer-events-auto sticky top-0 bg-[#1E1E1E] flex flex-col items-stretch justify-between p-[2vw]'

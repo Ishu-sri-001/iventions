@@ -244,22 +244,22 @@ export default function Navbar() {
         >
           <div className="flex flex-col w-[1vw] justify-start gap-[0.2vw] relative group cursor-pointer">
             <span
-              className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 ${
+              className={`block h-px  bg-black transform origin-left ease-in-out transition-transform duration-500 ${
                 hasAnimated ? "scale-x-0" : "scale-x-100"
               } ${
                 menuOpen
-                  ? "rotate-45 translate-y-[-0.25vw]"
-                  : "rotate-0 translate-y-0"
+                  ? "rotate-45 translate-y-[-0.08vw] w-[50%]"
+                  : "rotate-0 translate-y-0 w-full"
               }`}
             ></span>
 
             <span
-              className={`block h-px w-full bg-black transform origin-left ease-in-out transition-transform duration-500 delay-100 ${
+              className={`block h-px  bg-black transform origin-left ease-in-out transition-transform duration-500 delay-100 ${
                 hasAnimated ? "scale-x-0" : "scale-x-100"
               } ${
                 menuOpen
-                  ? "-rotate-45 translate-y-[0.2vw]"
-                  : "rotate-0 translate-y-0"
+                  ? "-rotate-45  w-[50%]"
+                  : "rotate-0 translate-y-0 w-full"
               }`}
             ></span>
           </div>
@@ -481,7 +481,9 @@ export default function Navbar() {
           className={`fixed inset-0 bg-black  transition-opacity duration-700 ${
             menuOpen ? "opacity-60" : "opacity-0"
           } pointer-events-none z-[9998]`}
-        ></div>
+        >
+
+        </div>
 
         {/* BLACK OVERLAY for PROJECT (higher z-index) */}
         <div

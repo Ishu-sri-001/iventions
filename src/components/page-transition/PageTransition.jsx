@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useRef, useState, useContext } from "react";
-import { gsap } from "gsap";
+import { motion, useAnimation } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export default function PageTransition({ children }) {
-  const overlayRef = useRef(null);
-  const circleOverlayRef = useRef(null);
+  const circleControls = useAnimation();
+  const overlayControls = useAnimation();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -17,17 +17,6 @@ export default function PageTransition({ children }) {
   const scrollPositionRef = useRef(0);
 
   const currentContext = useContext(LayoutRouterContext);
-
-  // Initialize overlays to their starting state
-  useEffect(() => {
-    gsap.set(circleOverlayRef.current, {
-      clipPath: "circle(0% at 0% 0%)",
-    });
-    gsap.set(overlayRef.current, {
-      clipPath: "polygon(0% 0%, 7.5% 0%, 100% 51.5%, 100% 100%, 76.75% 100%, 0% 7%)",
-      autoAlpha: 0,
-    });
-  }, []);
 
   useEffect(() => {
     if (!isRouteFrozen) setFreezeContext(currentContext);
@@ -77,82 +66,92 @@ export default function PageTransition({ children }) {
     }
   }, [isRouteFrozen]);
   
-  const startEntryAnimation = () => {
+  const startEntryAnimation = async () => {
     setIsAnimating(true);
     setIsRouteFrozen(true);
 
-    const overlay = overlayRef.current;
-    const circleOverlay = circleOverlayRef.current;
-
-    // Reset to starting state before animation
-    gsap.set(circleOverlay, {
+    // Reset to starting state and make visible immediately
+    circleControls.set({
       clipPath: "circle(0% at 0% 0%)",
     });
     
-    gsap.set(overlay, {
+    overlayControls.set({
       clipPath: "polygon(0% 0%, 7.5% 0%, 100% 51.5%, 100% 100%, 76.75% 100%, 0% 7%)",
-      autoAlpha: 1,
+      opacity: 1,
+      visibility: "visible",
     });
 
-    const tl = gsap.timeline({
-      defaults: { ease: "power2.inOut" },
-      onComplete: () => {
-        setIsRouteFrozen(false);
-        
-        if (pendingPathRef.current) {
-          router.push(pendingPathRef.current);
-          pendingPathRef.current = null;
-        }
+    // Small delay to ensure render
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    // Animate circle
+    circleControls.start({
+      clipPath: 'circle(160% at 0% 0%)',
+      transition: {
+        duration: 0.5,
+        ease: "linear",
       },
     });
 
-    tl.to(circleOverlay, {
-      clipPath: 'circle(160% at 0% 0%)',
-      duration: 0.5,
-      ease: 'linear',
-    })
-    .to(overlay, {
-      duration: 0.6,
-      ease: 'linear',
+    // Animate overlay with delay
+    await overlayControls.start({
       clipPath: "polygon(0% 0%, 7.5% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 7%)",
-    }, "<0.5");
+      transition: {
+        duration: 0.6,
+        ease: "linear",
+        delay: 0.5,
+      },
+    });
+
+    setIsRouteFrozen(false);
+    
+    if (pendingPathRef.current) {
+      router.push(pendingPathRef.current);
+      pendingPathRef.current = null;
+    }
   };
 
   useEffect(() => {
     if (!isAnimating) return;
     
-    const overlay = overlayRef.current;
+    const timer = setTimeout(async () => {
+      // Set initial exit state
+      await overlayControls.set({
+        clipPath: "polygon(100% 100%, 0% 0%, 100% 100%, 0% 100%, 0% 0%, 100% 0%)",
+      });
 
-    const timer = setTimeout(() => {
-      const tl = gsap.timeline({
-        defaults: { ease: "power2.inOut" },
-        onComplete: () => {
-          // RESET EVERYTHING BACK TO STARTING STATE
-          gsap.set(circleOverlayRef.current, {
-            clipPath: "circle(0% at 0% 0%)",
-          });
-
-          gsap.set(overlay, {
-            clipPath: "polygon(0% 0%, 7.5% 0%, 100% 51.5%, 100% 100%, 76.75% 100%, 0% 7%)",
-            autoAlpha: 0,
-          });
-
-          setIsAnimating(false);
+      // First animation
+      await overlayControls.start({
+        clipPath: "polygon(100% 0%, 0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%)",
+        transition: {
+          duration: 1,
+          ease: [0.45, 0, 0.55, 1], // power2.inOut equivalent
         },
       });
 
-      tl.set(overlay, {
-        clipPath: "polygon(100% 100%, 0% 0%, 100% 100%, 0% 100%, 0% 0%, 100% 0%)",
-      })
-      .to(overlay, {
-        duration: 1,
-        clipPath: "polygon(100% 0%, 0% 0%, 0% 100%, 0% 100%, 0% 0%, 100% 0%)",
-      })
-      .to(overlay, {
-        delay: 1,
-        duration: 0.3,
-        autoAlpha: 0,
+      // Fade out
+      await overlayControls.start({
+        opacity: 0,
+        visibility: "hidden",
+        transition: {
+          duration: 0.3,
+          delay: 1,
+          ease: [0.45, 0, 0.55, 1],
+        },
       });
+
+      // Reset everything back to starting state
+      await circleControls.set({
+        clipPath: "circle(0% at 0% 0%)",
+      });
+
+      await overlayControls.set({
+        clipPath: "polygon(0% 0%, 7.5% 0%, 100% 51.5%, 100% 100%, 76.75% 100%, 0% 7%)",
+        opacity: 0,
+        visibility: "hidden",
+      });
+
+      setIsAnimating(false);
     }, 1150);
 
     return () => clearTimeout(timer);
@@ -162,16 +161,23 @@ export default function PageTransition({ children }) {
     <LayoutRouterContext.Provider value={isRouteFrozen ? freezeContext : currentContext}>
       {children}
       
-      <div
-        ref={circleOverlayRef}
+      <motion.div
+        animate={circleControls}
+        initial={{
+          clipPath: "circle(0% at 0% 0%)",
+        }}
         className="fixed top-0 left-0 z-[9999] w-[128vw] h-[125vh] rounded-br-full overflow-hidden"
         style={{ 
-          clipPath: "circle(0% at 0% 0%)",
           pointerEvents: isAnimating ? "auto" : "none"
         }}
       >
-        <div
-          ref={overlayRef}
+        <motion.div
+          animate={overlayControls}
+          initial={{
+            clipPath: "polygon(0% 0%, 7.5% 0%, 100% 51.5%, 100% 100%, 76.75% 100%, 0% 7%)",
+            opacity: 0,
+            visibility: "hidden",
+          }}
           style={{
             position: "fixed",
             top: 0,
@@ -182,12 +188,9 @@ export default function PageTransition({ children }) {
             zIndex: 9999,
             transformOrigin: 'top left',
             pointerEvents: "none",
-            clipPath: "polygon(0% 0%, 7.5% 0%, 100% 51.5%, 100% 100%, 76.75% 100%, 0% 7%)",
-            opacity: 0,
-            visibility: "hidden",
           }}
         />
-      </div>
+      </motion.div>
     </LayoutRouterContext.Provider>
   );
 }

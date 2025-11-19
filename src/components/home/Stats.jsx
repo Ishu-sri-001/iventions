@@ -18,11 +18,26 @@ const Insights = () => {
   const baseRotateY = -5;
 
 const mids = [
-  "270<sup>+</sup>",
-  "90<sup>%</sup>",
-  "21",
-  "31",
-  "1.2<sup>K</sup>",
+  {
+    no: '270',
+    superScript: '+'
+  },
+  {
+    no: '90',
+    superScript: '%'
+  },
+  {
+    no: '21',
+    superScript: ''
+  },
+  {
+    no: '30',
+    superScript: ''
+  },
+  {
+    no: '1.2',
+    superScript: 'K'
+  },,
 ];
 
   const heading = [
@@ -293,7 +308,7 @@ const mids = [
         </div>
 
         <div className="w-[22%]">
-          <div className="h-[8vw]  relative overflow-hidden w-full">
+          <div className="h-[9vw]  relative overflow-hidden w-full">
             {content.map((no, idx) => (
               <p
                 key={idx}
@@ -308,12 +323,20 @@ const mids = [
 
         <div className="h-[15vw] w-[30vw] overflow-hidden absolute z-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <div className="h-full  w-full relative space-y-[1vw] mid-nos-top">
-            {mids.map((no, idx) => (
+            {mids.map((n, idx) => (
               <p
   key={idx}
   className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 text-yellow text-[10vw] font-bold"
-  dangerouslySetInnerHTML={{ __html: no }}
-></p>
+>
+  <span className="absolute right-[-4vw] top-[1vw] text-[5vw]">
+    {n.superScript}
+  </span>
+  {n.no}
+</p>
+
+              
+
+              
 
             ))}
           </div>
@@ -329,14 +352,16 @@ const mids = [
           </div>
 
           <div className="h-[15vw] w-full flex justify-center">
-            <div className="h-[55vw] space-y-[2vw] mid-nos">
-              {mids.map((no, idx) => (
+            <div className="h-[55vw]  space-y-[2vw] mid-nos">
+              {mids.map((n, idx) => (
                 <p
                   key={idx}
-                  className="text-white h-[12vw] text-[10vw] font-bold text-center"
-                  dangerouslySetInnerHTML={{ __html: no }}
+                  className="text-white relative h-[12vw] text-[10vw] font-bold text-center"
                 >
-                  
+                     <span className="absolute text-white right-[-3vw] top-[1vw] text-[5vw]">
+    {n.superScript}
+  </span>
+                  {n.no}
                 </p>
               ))}
               <div className="w-full flex cursor-pointer justify-center mt-[5vw]">
