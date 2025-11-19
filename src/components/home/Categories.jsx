@@ -141,43 +141,6 @@ const Categories = () => {
       const cards = cardsRef.current;
       const numCards = cards.length;
 
-    
-        // SINGLE IMAGE SCALE SCROLLTRIGGER USING containerRef
-      ScrollTrigger.create({
-  trigger: containerRef.current,
-  start: "top top",
-  end: `+=${(numCards - 1) * 100}%`,
-  scrub: true,
-  // markers: true,
-  onUpdate: (self) => {
-    const p = self.progress; // 0 → 1
-
-    cards.forEach((card, index) => {
-      const img = card.querySelector(".card-image");
-      if (!img) return;
-
-      const segmentStart = (index - 1) / (numCards - 1);
-      const segmentEnd = index / (numCards - 1);
-
-      // Local progress of THIS card sliding in
-      let local = (p - segmentStart) / (segmentEnd - segmentStart);
-      local = gsap.utils.clamp(0, 1, local);
-
-      // Scale during ONLY the slide-up moment
-      const scale = 1.2 - local * 0.2; // 1.2 → 1.0
-
-      gsap.to(img, {
-        scale,
-        overwrite: true,
-        duration: 0.1,
-      });
-    });
-  },
-});
-
-
-
-
       // Initial setup
       cards.forEach((card, i) => {
         gsap.set(card, {
@@ -237,17 +200,19 @@ const Categories = () => {
           i - 1
         );
 
+        // Image scale animation - starts at middle of the slide
         const currentCardImage = cards[i].querySelector(".card-image");
         if (currentCardImage) {
           tl.fromTo(
             currentCardImage,
             {
               scale: 1.2,
-            }, {
-              scale:1,
-              ease: "power2.out",
+            }, 
+            {
+              scale: 1,
+              ease: "none",
             },
-            i - 1
+            i - 0.5  // Starts halfway through the slide animation
           );
         }
 

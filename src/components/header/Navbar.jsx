@@ -238,9 +238,9 @@ export default function Navbar() {
             if (projectOpen) setProjectOpen(false);
             setMenuOpen(!menuOpen);
           }}
-          onMouseEnter={handleMenuHover}
-          onMouseLeave={leaveNav}
-          className="flex  overflow-hidden  nav-menu-item items-center group gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw]  z-10000 relative"
+          // onMouseEnter={handleMenuHover}
+          // onMouseLeave={leaveNav}
+          className="flex  overflow-hidden  nav-menu-item items-center  gap-[1.5vw] cursor-pointer outline-none bg-yellow px-[2vw] h-full py-[1vw] rounded-br-[1vw]  z-10000 relative"
         >
           <div className="flex flex-col w-[1vw] justify-start gap-[0.2vw] relative group cursor-pointer">
             <span
@@ -248,7 +248,7 @@ export default function Navbar() {
                 hasAnimated ? "scale-x-0" : "scale-x-100"
               } ${
                 menuOpen
-                  ? "rotate-45 translate-y-[-0.08vw] w-[50%]"
+                  ? "rotate-45 translate-y-[-0.09vw] w-[50%]"
                   : "rotate-0 translate-y-0 w-full"
               }`}
             ></span>
@@ -269,7 +269,7 @@ export default function Navbar() {
       w-full h-[2vw]
       transition-none
       group-hover:transition-all group-hover:duration-300
-      group-hover:translate-y-[-1.05vw]
+      group-hover:translate-y-[-1.07vw]
       flex flex-col items-start justify-end
     "
             >
@@ -287,71 +287,46 @@ export default function Navbar() {
         {/* Right - Got a Project */}
         <button
           disabled={menuOpen}
-          onMouseEnter={handleProjectEnter}
-          onMouseLeave={LeaveProjectHover}
+          // onMouseEnter={handleProjectEnter}
+          // onMouseLeave={LeaveProjectHover}
           onClick={() => {
             if (menuOpen) setMenuOpen(false);
             setProjectOpen(!projectOpen);
           }}
-          className={`relative nav-menu-item  flex items-center overflow-hidden justify-center  cursor-pointer outline-none bg-yellow px-[1vw] h-full py-[1vw] rounded-bl-[1vw]  group ${
+          className={`relative nav-menu-item  flex flex-col items-center overflow-hidden justify-center  cursor-pointer outline-none bg-yellow px-[1vw] h-full py-[1vw] rounded-bl-[1vw]   ${
             menuOpen ? "z-9995" : "z-10002"
           }`}
         >
-          <div className="relative w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
-            <div className="absolute project-top-text w-full h-full flex items-center justify-center overflow-hidden">
+          <div className="relative group w-[7vw] h-[1vw]   overflow-hidden">
+
+            <div className="w-full flex flex-col group-hover:translate-y-[-1.25vw] group-hover:transition-all group-hover:duration-300 gap-[0.2vw] items-center justify-center">
+
+          
+            <div className=" project-top-text   w-full h-full flex items-center justify-center overflow-hidden">
               <span
                 className={`
-    absolute font-body text-[0.7vw] font-semibold
-    ${
-      projectOpen
-        ? "transition-all duration-300 opacity-0 translate-y-[-100%]"
-        : "transition-none translate-y-0 opacity-100"
-    }
+     font-body text-[0.7vw] font-semibold
+    
   `}
               >
-                GOT A PROJECT?
+                {projectOpen? 'CLOSE': 'GOT A PROJECT?'}
               </span>
 
-              <span
-                className={`
-    absolute font-body text-[0.7vw] font-semibold
-    ${
-      projectOpen
-        ? "transition-all duration-300 translate-y-0 opacity-100 delay-200"
-        : "transition-none translate-y-full opacity-0"
-    }
-  `}
-              >
-                CLOSE
-              </span>
+             
             </div>
-            <div className="absolute project-below-text w-[7vw] h-[1vw] flex items-center justify-center overflow-hidden">
+             <div className=" project-top-text  group-hover:transition-all group-hover:duration-300 w-full h-full flex items-center justify-center overflow-hidden">
               <span
                 className={`
-    absolute font-body text-[0.7vw] font-semibold
-    ${
-      projectOpen
-        ? "transition-all duration-300 translate-y-[-100%] opacity-0"
-        : "transition-none translate-y-0 opacity-100"
-    }
+     font-body text-[0.7vw] font-semibold
+    
   `}
               >
-                GOT A PROJECT?
+                {projectOpen? 'CLOSE ': 'GOT A PROJECT?'}
               </span>
 
-              <span
-                className={`
-    absolute font-body text-[0.7vw] font-semibold
-    ${
-      projectOpen
-        ? "transition-all duration-300 translate-y-0 opacity-100 delay-200"
-        : "transition-none translate-y-full opacity-0"
-    }
-  `}
-              >
-                CLOSE
-              </span>
+             
             </div>
+              </div>
           </div>
           <div
             className={`w-fit flex justify-center items-center absolute duration-300 ease-in-out right-[20%] ${
