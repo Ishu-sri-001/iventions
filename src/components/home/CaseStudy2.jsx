@@ -247,17 +247,17 @@ const CaseStudy2 = () => {
               </div>
             </div>
 
-            <div className='text-sm text-gray-500 flex gap-[0.3vw] font-display tracking-widest'>
-              <span key={`quote-${current}`} className='slider-content'>
+            <div className='text-sm text-gray-500  w-[4vw] flex gap-[0.3vw] font-display tracking-widest'>
+              <span key={`quote-${current}`} className='slider-content w-[40%]'>
                 {String(current + 1).padStart(2, '0')}
               </span>
-              <span>/ {String(slides.length).padStart(2, '0')}</span>
+              <span className='w-[60%]'>/ {String(slides.length).padStart(2, '0')}</span>
             </div>
 
             <div>
               <Btn text='See full case study' />
             </div>
-          </div>
+          </div>a
 
         </div>
       </div>

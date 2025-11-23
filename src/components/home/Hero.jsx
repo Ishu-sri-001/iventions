@@ -13,6 +13,8 @@ const Hero = () => {
   const clipRef = useRef(null);
   const heroRef = useRef(null);
   const [isFullyScaled, setIsFullyScaled] = useState(false);
+    const isMobile = globalThis.innerWidth <= 1024;
+
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -43,6 +45,10 @@ const Hero = () => {
   //    rotateY: baseRotateY,
   //  })
 
+  if(!isMobile)
+  {
+
+
      gsap.fromTo('.hero-video', 
   { rotateX: baseRotateX, rotateY: baseRotateY }, 
   {
@@ -62,11 +68,13 @@ const Hero = () => {
     }
   }
 );
+  }
 
         
         tl.to(videoRef.current, {
           opacity: 1,
         }, '-=0.5');
+        
       
     })
     return () => ctx.revert();
@@ -151,17 +159,17 @@ const Hero = () => {
       id="hero"
       onMouseMove={handleMouseMove}  
       onMouseLeave={handleMouseLeave}
-      className="w-screen h-[140vh] relative  "
+      className="w-screen h-[140vh] max-sm:h-[120vh] bg-black relative  "
     >
       <div className="fixed inset-0 bg-[#F3EFEB] pointer-events-none h-full w-full ivention-overlay z-[99999]">
 
       </div>
 
-      <div className="h-screen w-full sticky top-0 overflow-hidden flex justify-center items-center">
+      <div className="h-screen w-full max-sm:w-screen sticky top-0 max-sm:left-0 overflow-hidden flex justify-center items-center">
 
       <div
         ref={videoRef}
-        className="h-[20vw] w-[34vw] opacity-0 hero-video relative z-40 rounded-[1.5vw] overflow-hidden shadow-2xl origin-center"
+        className="h-[20vw] w-[34vw] max-sm:h-[55vw] max-sm:mx-auto max-sm:w-[90vw] opacity-0 hero-video relative z-40 rounded-[1.5vw] overflow-hidden shadow-2xl origin-cente max-sm:rounded-[3.5vw]"
         style={{
           transformStyle: "preserve-3d",
           transform: `perspective(800px) rotateX(${baseRotateX}deg) rotateY(${baseRotateY}deg)`,
@@ -184,37 +192,38 @@ const Hero = () => {
 <ClipPath clipRef={clipRef} />
 
       {/* TEXT LAYER */}
-      <div className="absolute inset-0 h-full w-full flex items-center text-[#101417] justify-between z-20 px-[3vw]">
-        <p className="text-[2.5vw] font-third leading-[1.1] hero-text">
+      <div className="absolute inset-0 h-screen w-full flex items-center max-sm:flex-col max-sm:items-center max-sm:justify-center max-sm:gap-80 text-[#101417] justify-between z-20 px-[3vw] max-sm:px-0
+      ">
+        <p className="text-[2.5vw] max-sm:text-[14vw] font-third leading-[1.1] hero-text max-sm:text-center">
           Step into <br /> the Spotlight
         </p>
-        <p className="w-[23%] text-[1.3vw] leading-none hero-text">
+        <p className="w-[23%] max-sm:w-[90%] max-sm:text-[5vw] text-[1.3vw] leading-none hero-text max-sm:text-center">
           We craft world-class spaces & events memories, initiate conversations
           and elevate ambitions.
         </p>
       </div>
 
       {/* SVG DECORATION */}
-     <div className="absolute bottom-5 left-0 w-full h-[25%] px-[2vw]">
+     <div className="absolute bottom-5 max-sm:bottom-0  left-0 w-full h-[25%] max-sm:h-[15%] px-[2vw] ">
   <Image
     width={1000}
     height={1000}
     src="/assets/svg/home-hero.svg"
     alt="text-svg"
-    className="absolute bottom-5 left-0 w-full h-full object-contain mix-blend-color-burn opacity-90 z-10"
+    className="absolute bottom-5  max-sm:bottom-[-5vw] left-0 w-full h-full max-sm:px-4 object-contain mix-blend-color-burn opacity-90 z-10"
   />
   <Image
     width={1000}
     height={1000}
     src="/assets/svg/home-hero.svg"
     alt="text-svg"
-    className="absolute bottom-5 left-0 w-full h-full object-contain mix-blend-color-burn opacity-90 z-10"
+    className="absolute bottom-5 max-sm:bottom-[-5vw] left-0 w-full h-full max-sm:px-4 object-contain mix-blend-color-burn opacity-90 z-10"
   />
 </div>
 
       {/* LIGHT OVERLAY */}
       <div className="w-full h-full absolute inset-0 z-15 bg-black/5" />
-            </div>
+  </div>
 
     </section>
   );

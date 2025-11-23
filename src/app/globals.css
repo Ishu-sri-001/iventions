@@ -17,6 +17,8 @@
   --font-third:var(--font-third);
   --poRight: -100%;
   --poLeft: 180%;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 1024px;
 }
 
 @media (prefers-color-scheme: dark) {
