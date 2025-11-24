@@ -16,6 +16,8 @@ import HighlightedProjects from "@/components/mobile/HighlightedProjects";
 import MobileCategories from "@/components/mobile/MobileCategories";
 import CaseStudy from "@/components/mobile/CaseStudy";
 import MobileStats from "@/components/mobile/MobileStats";
+import MobileQuoteContact from "@/components/mobile/MobileQuoteContact";
+import MobileFooter from "@/components/footer/MobileFooter";
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
@@ -41,10 +43,10 @@ export default function Home() {
       {isMobile ? <CaseStudy /> : <CaseStudy2 />}
       {isMobile ? <MobileStats /> : <Stats />}
 
-      {isMobile ? "" : <QuoteContact />}
+      {isMobile ? <MobileQuoteContact /> : <QuoteContact />}
 
       {/* <ProjectsDelievered /> */}
-      <Footer />
+      {isMobile ? <MobileFooter /> : <Footer />}
     </>
   );
 }
